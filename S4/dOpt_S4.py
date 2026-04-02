@@ -23,6 +23,7 @@ import makeS4structure
 
 dim = "2-d"
 
+
 # Test my S4 optimization against Larry's results 
 
 params_2d = {
