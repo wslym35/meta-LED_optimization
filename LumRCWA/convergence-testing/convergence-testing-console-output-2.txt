@@ -1,0 +1,96 @@
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 110 
+z mesh = 25 
+k mesh =32
+Took 434.0423278808594 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 110 
+z mesh = 25 
+k mesh =36
+Took 2220.2603707313538 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 110 
+z mesh = 25 
+k mesh =40
+Took 2315.5018191337585 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 110 
+z mesh = 25 
+k mesh =44
+Took 2463.2583096027374 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 125 
+z mesh = 25 
+k mesh =32
+Took 2168.771207332611 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 125 
+z mesh = 25 
+k mesh =36
+Took 2270.2459964752197 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 125 
+z mesh = 25 
+k mesh =40
+Took 2387.979473590851 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 125 
+z mesh = 25 
+k mesh =44
+Took 1775.5791895389557 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 140 
+z mesh = 25 
+k mesh =32
+Took 2217.7928323745728 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 140 
+z mesh = 25 
+k mesh =36
+Took 2336.537434577942 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 140 
+z mesh = 25 
+k mesh =40
+Took 1775.3277957439423 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 140 
+z mesh = 25 
+k mesh =44
+Took 1774.5203869342804 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 155 
+z mesh = 25 
+k mesh =32
+Took 2268.3455741405487 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 155 
+z mesh = 25 
+k mesh =36
+Took 1773.2525010108948 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 155 
+z mesh = 25 
+k mesh =40
+Took 1773.8576259613037 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 155 
+z mesh = 25 
+k mesh =44
+Took 1773.795687675476 seconds to calculate FoM.

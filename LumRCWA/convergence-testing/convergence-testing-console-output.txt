@@ -1,0 +1,1639 @@
+%runcell -i 0 /home/quadrupole/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/LumRCWA/directivity.py
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 1324.7099137306213 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 1793.7772119045258 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 1797.5132632255554 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 1793.8806126117706 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 1799.306892156601 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 1811.4247150421143 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 1799.4082036018372 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 1811.832418680191 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 1833.3739125728607 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 1804.2895035743713 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 1823.6325898170471 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 1851.697893857956 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 1797.421597957611 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 1797.354166984558 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 1811.9452764987946 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 1803.4074742794037 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 1825.435296535492 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 1847.3796820640564 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 1819.7849428653717 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 1850.1279282569885 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 1930.6638345718384 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 1840.3650002479553 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 1882.2755007743835 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 1847.5425577163696 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 1804.399732351303 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 1818.022285938263 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 1845.5498685836792 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 1828.1056642532349 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 1857.5062177181244 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 1889.555027961731 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 1855.7035212516785 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 1892.328959941864 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 1791.6379776000977 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 70 
+k mesh =20
+Took 1900.9344339370728 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 70 
+k mesh =24
+Took 116.5657958984375 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 80 
+z mesh = 70 
+k mesh =28
+Took 854.4761927127838 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 25 
+k mesh =20
+Took 1821.5880589485168 seconds to calculate FoM.
+Highest directivity is 0.988 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 25 
+k mesh =24
+Took 976.2308979034424 seconds to calculate FoM.
+Highest directivity is 1.013 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 25 
+k mesh =28
+Took 1891.6460766792297 seconds to calculate FoM.
+Highest directivity is 1.009 at QW depth of 1950 nm (from sapphire).
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 40 
+k mesh =20
+Took 1855.0389325618744 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 40 
+k mesh =24
+Took 1894.7161982059479 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 40 
+k mesh =28
+Took 1931.584857225418 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 55 
+k mesh =20
+Took 1970.2311153411865 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 55 
+k mesh =24
+Took 1791.0725219249725 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 55 
+k mesh =28
+Took 1932.4516968727112 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 70 
+k mesh =20
+Took 1903.3917977809906 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 70 
+k mesh =24
+Took 1857.6971774101257 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 1 
+xy mesh = 95 
+z mesh = 70 
+k mesh =28
+Took 1922.214842557907 seconds to calculate FoM.
+Highest directivity is 1.214 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 1809.727510213852 seconds to calculate FoM.
+Highest directivity is 1.327 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 1813.5323767662048 seconds to calculate FoM.
+Highest directivity is 1.288 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 500.3633496761322 seconds to calculate FoM.
+Highest directivity is 1.214 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 1821.7840082645416 seconds to calculate FoM.
+Highest directivity is 1.327 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 1837.4598054885864 seconds to calculate FoM.
+Highest directivity is 1.288 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 1859.5409696102142 seconds to calculate FoM.
+Highest directivity is 1.214 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 1831.7526705265045 seconds to calculate FoM.
+Highest directivity is 1.327 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 1861.3704512119293 seconds to calculate FoM.
+Highest directivity is 1.288 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 1899.8453516960144 seconds to calculate FoM.
+Highest directivity is 1.214 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 1846.044590473175 seconds to calculate FoM.
+Highest directivity is 1.327 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 1892.1165659427643 seconds to calculate FoM.
+Highest directivity is 1.288 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 1937.5287296772003 seconds to calculate FoM.
+Highest directivity is 1.187 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 1817.4478986263275 seconds to calculate FoM.
+Highest directivity is 1.297 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 1829.5290668010712 seconds to calculate FoM.
+Highest directivity is 1.260 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 1851.5194902420044 seconds to calculate FoM.
+Highest directivity is 1.187 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 1833.59934425354 seconds to calculate FoM.
+Highest directivity is 1.297 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 1866.201421737671 seconds to calculate FoM.
+Highest directivity is 1.260 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 1909.5428080558777 seconds to calculate FoM.
+Highest directivity is 1.187 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 1862.2675106525421 seconds to calculate FoM.
+Highest directivity is 1.297 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 1911.4759323596954 seconds to calculate FoM.
+Highest directivity is 1.260 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 1995.66499376297 seconds to calculate FoM.
+Highest directivity is 1.187 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 1894.0851464271545 seconds to calculate FoM.
+Highest directivity is 1.297 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 1955.7279613018036 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 2045.2906155586243 seconds to calculate FoM.
+Highest directivity is 1.167 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 1829.853669166565 seconds to calculate FoM.
+Highest directivity is 1.277 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 1853.7116916179657 seconds to calculate FoM.
+Highest directivity is 1.238 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 1889.5528836250305 seconds to calculate FoM.
+Highest directivity is 1.167 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 1865.4945986270905 seconds to calculate FoM.
+Highest directivity is 1.277 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 1911.6084940433502 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 2045.0437979698181 seconds to calculate FoM.
+Highest directivity is 1.167 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 1907.439530134201 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 2085.7227914333344 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 1895.7330021858215 seconds to calculate FoM.
+Highest directivity is 1.167 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 70 
+k mesh =20
+Took 1962.7025921344757 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 70 
+k mesh =24
+Took 2088.5894000530243 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 80 
+z mesh = 70 
+k mesh =28
+Took 2032.9276366233826 seconds to calculate FoM.
+Highest directivity is 1.159 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 25 
+k mesh =20
+Took 1852.0135333538055 seconds to calculate FoM.
+Highest directivity is 1.267 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 25 
+k mesh =24
+Took 1888.4290714263916 seconds to calculate FoM.
+Highest directivity is 1.229 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 25 
+k mesh =28
+Took 1946.0194816589355 seconds to calculate FoM.
+Highest directivity is 1.159 at QW depth of 1950 nm (from sapphire).
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 40 
+k mesh =20
+Took 1906.0515773296356 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 40 
+k mesh =24
+Took 1939.2125895023346 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 40 
+k mesh =28
+Took 1886.9743061065674 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 55 
+k mesh =20
+Took 1992.7027640342712 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 55 
+k mesh =24
+Took 1967.3526718616486 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 55 
+k mesh =28
+Took 2060.945859670639 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 70 
+k mesh =20
+Took 1908.9345471858978 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 70 
+k mesh =24
+Took 1916.0401799678802 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 30 
+xy mesh = 95 
+z mesh = 70 
+k mesh =28
+Took 1960.8490476608276 seconds to calculate FoM.
+Highest directivity is 1.180 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 1835.8409922122955 seconds to calculate FoM.
+Highest directivity is 1.289 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 1849.5328633785248 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 1877.5213255882263 seconds to calculate FoM.
+Highest directivity is 1.180 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 1860.182974100113 seconds to calculate FoM.
+Highest directivity is 1.289 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 1891.8281452655792 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 1933.8170893192291 seconds to calculate FoM.
+Highest directivity is 1.180 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 1884.0177400112152 seconds to calculate FoM.
+Highest directivity is 1.289 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 1935.6147079467773 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 1998.5872821807861 seconds to calculate FoM.
+Highest directivity is 1.180 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 1915.4918992519379 seconds to calculate FoM.
+Highest directivity is 1.289 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 1985.7583384513855 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 2063.8408586978912 seconds to calculate FoM.
+Highest directivity is 1.147 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 1847.5269792079926 seconds to calculate FoM.
+Highest directivity is 1.253 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 1869.9096865653992 seconds to calculate FoM.
+Highest directivity is 1.211 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 1905.4785585403442 seconds to calculate FoM.
+Highest directivity is 1.147 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 1877.4683647155762 seconds to calculate FoM.
+Highest directivity is 1.253 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 1935.6525855064392 seconds to calculate FoM.
+Highest directivity is 1.211 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 1992.6862137317657 seconds to calculate FoM.
+Highest directivity is 1.147 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 1921.9724745750427 seconds to calculate FoM.
+Highest directivity is 1.253 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 1997.6273028850555 seconds to calculate FoM.
+Highest directivity is 1.211 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 2086.9573950767517 seconds to calculate FoM.
+Highest directivity is 1.147 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 1969.8801851272583 seconds to calculate FoM.
+Highest directivity is 1.253 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 2057.86728310585 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 2109.49205493927 seconds to calculate FoM.
+Highest directivity is 1.132 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 1858.3581609725952 seconds to calculate FoM.
+Highest directivity is 1.239 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 1899.8468761444092 seconds to calculate FoM.
+Highest directivity is 1.195 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 1955.5754249095917 seconds to calculate FoM.
+Highest directivity is 1.132 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 1921.4816982746124 seconds to calculate FoM.
+Highest directivity is 1.239 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 1985.7168357372284 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 2067.9231419563293 seconds to calculate FoM.
+Highest directivity is 1.132 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 1972.5592412948608 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 2071.187957048416 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 2027.8755676746368 seconds to calculate FoM.
+Highest directivity is 1.132 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 70 
+k mesh =20
+Took 2044.9323391914368 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 70 
+k mesh =24
+Took 2054.568338394165 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 80 
+z mesh = 70 
+k mesh =28
+Took 2088.780064344406 seconds to calculate FoM.
+Highest directivity is 1.124 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 25 
+k mesh =20
+Took 1885.7967705726624 seconds to calculate FoM.
+Highest directivity is 1.228 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 25 
+k mesh =24
+Took 1946.3759033679962 seconds to calculate FoM.
+Highest directivity is 1.185 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 25 
+k mesh =28
+Took 2016.244623184204 seconds to calculate FoM.
+Highest directivity is 1.124 at QW depth of 1950 nm (from sapphire).
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 40 
+k mesh =20
+Took 1964.0021541118622 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 40 
+k mesh =24
+Took 2015.960685968399 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 40 
+k mesh =28
+Took 1994.560916185379 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 55 
+k mesh =20
+Took 2024.4914164543152 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 55 
+k mesh =24
+Took 1995.4601459503174 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 55 
+k mesh =28
+Took 2070.880912065506 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 70 
+k mesh =20
+Took 1997.4729099273682 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 70 
+k mesh =24
+Took 2053.935542345047 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 40 
+xy mesh = 95 
+z mesh = 70 
+k mesh =28
+Took 2120.01767206192 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 1881.9536654949188 seconds to calculate FoM.
+Highest directivity is 1.291 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 1921.5941941738129 seconds to calculate FoM.
+Highest directivity is 1.303 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 1971.5845310688019 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 1937.5244278907776 seconds to calculate FoM.
+Highest directivity is 1.291 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 1999.6961207389832 seconds to calculate FoM.
+Highest directivity is 1.303 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 2085.7791659832 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 1985.9809255599976 seconds to calculate FoM.
+Highest directivity is 1.291 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 2085.7462134361267 seconds to calculate FoM.
+Highest directivity is 1.303 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 2196.298399209976 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 2041.9579339027405 seconds to calculate FoM.
+Highest directivity is 1.291 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 2174.3723559379578 seconds to calculate FoM.
+Highest directivity is 1.303 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 2314.469286441803 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 1899.5112159252167 seconds to calculate FoM.
+Highest directivity is 1.266 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 1940.4843196868896 seconds to calculate FoM.
+Highest directivity is 1.278 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 2008.431363582611 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 1961.5716569423676 seconds to calculate FoM.
+Highest directivity is 1.266 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 2045.7446129322052 seconds to calculate FoM.
+Highest directivity is 1.278 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 2146.652529001236 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 2030.3418669700623 seconds to calculate FoM.
+Highest directivity is 1.266 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 2151.8280584812164 seconds to calculate FoM.
+Highest directivity is 1.278 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 2299.8493003845215 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 2105.982524871826 seconds to calculate FoM.
+Highest directivity is 1.266 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 2256.5645751953125 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 2356.7610914707184 seconds to calculate FoM.
+Highest directivity is 1.225 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 1911.8419547080994 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 1982.0678672790527 seconds to calculate FoM.
+Highest directivity is 1.253 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 2061.7545852661133 seconds to calculate FoM.
+Highest directivity is 1.225 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 2003.9688243865967 seconds to calculate FoM.
+Highest directivity is 1.244 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 2111.9596157073975 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 2228.783147096634 seconds to calculate FoM.
+Highest directivity is 1.225 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 2079.898912191391 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 2230.339877128601 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 2231.846125602722 seconds to calculate FoM.
+Highest directivity is 1.225 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 70 
+k mesh =20
+Took 2179.6825003623962 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 70 
+k mesh =24
+Took 2268.520273208618 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 80 
+z mesh = 70 
+k mesh =28
+Took 2355.016602039337 seconds to calculate FoM.
+Highest directivity is 1.218 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 25 
+k mesh =20
+Took 1934.155673980713 seconds to calculate FoM.
+Highest directivity is 1.237 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 25 
+k mesh =24
+Took 2033.841138601303 seconds to calculate FoM.
+Highest directivity is 1.246 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 25 
+k mesh =28
+Took 2140.3021223545074 seconds to calculate FoM.
+Highest directivity is 1.218 at QW depth of 1950 nm (from sapphire).
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 40 
+k mesh =20
+Took 2058.630672931671 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 40 
+k mesh =24
+Took 2133.1261534690857 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 40 
+k mesh =28
+Took 2141.39675617218 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 55 
+k mesh =20
+Took 2124.1707577705383 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 55 
+k mesh =24
+Took 2141.3107726573944 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 55 
+k mesh =28
+Took 2276.1293246746063 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 70 
+k mesh =20
+Took 2140.1039333343506 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 70 
+k mesh =24
+Took 2246.4182279109955 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 50 
+xy mesh = 95 
+z mesh = 70 
+k mesh =28
+Took 2406.571385860443 seconds to calculate FoM.
+Highest directivity is 1.265 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 1916.6764254570007 seconds to calculate FoM.
+Highest directivity is 1.275 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 1975.65465426445 seconds to calculate FoM.
+Highest directivity is 1.283 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 2042.2553670406342 seconds to calculate FoM.
+Highest directivity is 1.265 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 1995.7423152923584 seconds to calculate FoM.
+Highest directivity is 1.275 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 2085.947742700577 seconds to calculate FoM.
+Highest directivity is 1.283 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 2195.8616325855255 seconds to calculate FoM.
+Highest directivity is 1.265 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 2067.6843230724335 seconds to calculate FoM.
+Highest directivity is 1.275 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 2191.909665584564 seconds to calculate FoM.
+Highest directivity is 1.283 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 2352.2211451530457 seconds to calculate FoM.
+Highest directivity is 1.265 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 2145.82027053833 seconds to calculate FoM.
+Highest directivity is 1.275 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 2314.4024777412415 seconds to calculate FoM.
+Highest directivity is 1.283 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 2508.733361721039 seconds to calculate FoM.
+Highest directivity is 1.243 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 1935.6127865314484 seconds to calculate FoM.
+Highest directivity is 1.251 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 1997.686714887619 seconds to calculate FoM.
+Highest directivity is 1.258 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 2084.0240485668182 seconds to calculate FoM.
+Highest directivity is 1.243 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 2017.6256861686707 seconds to calculate FoM.
+Highest directivity is 1.251 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 2141.890444755554 seconds to calculate FoM.
+Highest directivity is 1.258 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 2268.931667804718 seconds to calculate FoM.
+Highest directivity is 1.243 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 2117.781440973282 seconds to calculate FoM.
+Highest directivity is 1.251 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 2274.4679141044617 seconds to calculate FoM.
+Highest directivity is 1.258 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 2462.1158385276794 seconds to calculate FoM.
+Highest directivity is 1.243 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 2212.6052000522614 seconds to calculate FoM.
+Highest directivity is 1.251 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 2404.472636461258 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 2554.312282562256 seconds to calculate FoM.
+Highest directivity is 1.220 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 1949.251145362854 seconds to calculate FoM.
+Highest directivity is 1.230 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 2043.9641246795654 seconds to calculate FoM.
+Highest directivity is 1.235 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 2142.034604072571 seconds to calculate FoM.
+Highest directivity is 1.220 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 733.8914177417755 seconds to calculate FoM.
+Highest directivity is 1.230 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 790.1032600402832 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 1519.2381501197815 seconds to calculate FoM.
+Highest directivity is 1.220 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 2124.5886018276215 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 2357.9382622241974 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 2388.170990228653 seconds to calculate FoM.
+Highest directivity is 1.220 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 70 
+k mesh =20
+Took 2278.9608981609344 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 70 
+k mesh =24
+Took 2421.2814304828644 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 80 
+z mesh = 70 
+k mesh =28
+Took 2535.3295991420746 seconds to calculate FoM.
+Highest directivity is 1.212 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 25 
+k mesh =20
+Took 1978.0476257801056 seconds to calculate FoM.
+Highest directivity is 1.223 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 25 
+k mesh =24
+Took 752.8803822994232 seconds to calculate FoM.
+Highest directivity is 1.228 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 25 
+k mesh =28
+Took 2216.330694913864 seconds to calculate FoM.
+Highest directivity is 1.212 at QW depth of 1950 nm (from sapphire).
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 40 
+k mesh =20
+Took 2122.4553666114807 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 40 
+k mesh =24
+Took 2231.84716629982 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 40 
+k mesh =28
+Took 2269.9726889133453 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 55 
+k mesh =20
+Took 2218.6298372745514 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 55 
+k mesh =24
+Took 2276.210521697998 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 55 
+k mesh =28
+Took 2444.108092069626 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 70 
+k mesh =20
+Took 2246.536322593689 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 70 
+k mesh =24
+Took 2404.2463438510895 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 60 
+xy mesh = 95 
+z mesh = 70 
+k mesh =28
+Took 2615.194469690323 seconds to calculate FoM.
+Highest directivity is 1.294 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 25 
+k mesh =20
+Took 2015.7765407562256 seconds to calculate FoM.
+Highest directivity is 1.273 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 25 
+k mesh =24
+Took 2116.4614667892456 seconds to calculate FoM.
+Highest directivity is 1.269 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 25 
+k mesh =28
+Took 2234.335695028305 seconds to calculate FoM.
+Highest directivity is 1.294 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 40 
+k mesh =20
+Took 2152.6438138484955 seconds to calculate FoM.
+Highest directivity is 1.273 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 40 
+k mesh =24
+Took 2302.708409309387 seconds to calculate FoM.
+Highest directivity is 1.269 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 40 
+k mesh =28
+Took 2484.345237970352 seconds to calculate FoM.
+Highest directivity is 1.294 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 55 
+k mesh =20
+Took 2270.020839214325 seconds to calculate FoM.
+Highest directivity is 1.273 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 55 
+k mesh =24
+Took 2494.62011218071 seconds to calculate FoM.
+Highest directivity is 1.269 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 55 
+k mesh =28
+Took 2759.917512655258 seconds to calculate FoM.
+Highest directivity is 1.294 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 70 
+k mesh =20
+Took 2410.253818511963 seconds to calculate FoM.
+Highest directivity is 1.273 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 70 
+k mesh =24
+Took 2699.27242064476 seconds to calculate FoM.
+Highest directivity is 1.269 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 50 
+z mesh = 70 
+k mesh =28
+Took 3023.371182203293 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 25 
+k mesh =20
+Took 2040.4238595962524 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 25 
+k mesh =24
+Took 2144.6595542430878 seconds to calculate FoM.
+Highest directivity is 1.246 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 25 
+k mesh =28
+Took 2282.716861963272 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 40 
+k mesh =20
+Took 2179.9728906154633 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 40 
+k mesh =24
+Took 2272.358273744583 seconds to calculate FoM.
+Highest directivity is 1.246 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 40 
+k mesh =28
+Took 2575.2699460983276 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 55 
+k mesh =20
+Took 2324.5233442783356 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 55 
+k mesh =24
+Took 2584.828072309494 seconds to calculate FoM.
+Highest directivity is 1.246 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 55 
+k mesh =28
+Took 2889.9803099632263 seconds to calculate FoM.
+Highest directivity is 1.272 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 70 
+k mesh =20
+Took 2483.2517285346985 seconds to calculate FoM.
+Highest directivity is 1.250 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 70 
+k mesh =24
+Took 2799.307503223419 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 70 
+xy mesh = 65 
+z mesh = 70 
+k mesh =28
+Took 3084.405482530594 seconds to calculate FoM.
+Highest directivity is 1.249 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 25 
+k mesh =20
+Took 2054.8418266773224 seconds to calculate FoM.
+Highest directivity is 1.230 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 25 
+k mesh =24
+Took 2194.3176534175873 seconds to calculate FoM.
+Highest directivity is 1.224 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 25 
+k mesh =28
+Took 2352.857439517975 seconds to calculate FoM.
+Highest directivity is 1.249 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 40 
+k mesh =20
+Took 2252.749110221863 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 40 
+k mesh =24
+Took 60.08958125114441 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 40 
+k mesh =28
+Took 2682.1272320747375 seconds to calculate FoM.
+Highest directivity is 1.249 at QW depth of 1950 nm (from sapphire).
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 55 
+k mesh =20
+Took 2380.3378505706787 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 55 
+k mesh =24
+Took 60.089974880218506 seconds to calculate FoM.
+<class 'Exception'>
+Fourier N = 70 
+xy mesh = 80 
+z mesh = 55 
+k mesh =28
+Took 2872.450518846512 seconds to calculate FoM.

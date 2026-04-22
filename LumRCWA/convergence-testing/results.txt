@@ -1,0 +1,51 @@
+Before solve: 0.19 GB
+After solve: 0.19 GB
+Highest directivity is D=1.212, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =16
+Took 194.09407210350037 seconds to calculate FoM.
+Before solve: 0.19 GB
+After solve: 0.19 GB
+Highest directivity is D=1.146, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =20
+Took 304.9412589073181 seconds to calculate FoM.
+Before solve: 0.19 GB
+After solve: 0.19 GB
+Highest directivity is D=1.159, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =22
+Took 361.98313331604004 seconds to calculate FoM.
+Before solve: 0.19 GB
+After solve: 0.19 GB
+Highest directivity is D=1.154, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =24
+Took 442.6031515598297 seconds to calculate FoM.
+Before solve: 0.18 GB
+After solve: 0.18 GB
+Highest directivity is D=1.155, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =26
+Took 882.424801826477 seconds to calculate FoM.
+Before solve: 0.12 GB
+After solve: 0.12 GB
+Highest directivity is D=1.168, with QWs at depths 1.931 um, 1.941 um, 1.950 um (from sapphire)
+Fourier N = 50 
+xy mesh = 90 
+z mesh = 55 
+k mesh =28
+Took 770.7806899547577 seconds to calculate FoM.
+Before solve: 0.12 GB
+
+### System crashed on k=30 due to memory filling up ###
