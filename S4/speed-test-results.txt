@@ -1,0 +1,2 @@
+On my laptop, the speed test takes 147 seconds. On the desktop, it takes 261 sec. 
+Ran on 2024/07/22. 
