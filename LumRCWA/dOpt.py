@@ -19,13 +19,17 @@ from ax.adapter.registry import Generators
 
 import time 
 
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, message=".*CUDA initialization.*")
+# The GPU I'm using is too old to be useful, no need to rub it in :'( 
+
 from directivity import FoM, min_mesa_width
 min_trench_width = 0.050e-6 
 
 dim = "2-d"
 
 params_2d = {
-          'Fourier_N' : 5, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
+          'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
           'wavelength_center' : 480e-9, 
           'wavelength_FWHM' : 20e-9, 
           'wavelength_points' : 1, 
@@ -224,8 +228,8 @@ def D_opt(dim, variables, params, constraints, trials):
 
     #Get the output as a dataframe? 
     trials_df = pd.DataFrame(data=results_ls[1:], columns=results_ls[0]) 
-    ax_df = ax_client.generation_strategy.trials_as_df 
-    trials_df.insert(loc=len(trials_df.columns), column="Generation Model", value=ax_df["Generation Model"])
+    ax_df = ax_client.get_trials_data_frame()
+    trials_df.insert(loc=len(trials_df.columns), column="Generation Model", value=ax_df["generation_node"])
     print(trials_df) 
     
     best_input, best_output = ax_client.get_best_parameters() 
@@ -237,7 +241,7 @@ def D_opt(dim, variables, params, constraints, trials):
     data = trials_df.to_numpy() 
     p_array = np.reshape(np.repeat(params, trial_count), (trial_count,1))
     data = np.append(data, p_array, 1) 
-    data = np.vstack([['\'D\'','\'QW depth\'', '\'variables\'', '\'method\'', '\'fixed parameters\''], data])
+    data = np.vstack([['\'D\'','\'QW depths\'', '\'variables\'', '\'method\'', '\'fixed parameters\''], data])
     
     return data, ax_client 
 

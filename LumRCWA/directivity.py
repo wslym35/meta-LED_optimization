@@ -22,7 +22,7 @@ import traceback
 def mem(): # Helper function for tracking where the memory usage spikes 
     return psutil.Process(os.getpid()).memory_info().rss / 1e9
 
-def setup(sim, QW_z_limits, wavelengths): 
+def setup(params, sim, QW_z_limits, wavelengths): 
     
     # Clear anything left over from previous runs 
     sim.switchtolayout() 
@@ -154,7 +154,7 @@ def QW_xy(params, x, y):
             return True 
     return False 
 
-def I(sim, angles):
+def I(params, sim, angles):
     
     # Set table of excitation angles, then get sim results
     #return sim # For troubleshooting
@@ -200,7 +200,7 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
     I_z_lambda_angle = np.zeros((len(kx_range), len(ky_range), params['QW_z_mesh'])) 
     
     sim = lumapi.FDTD(hide=False) 
-    setup(sim, QW_z_limits, wavelengths) 
+    setup(params, sim, QW_z_limits, wavelengths) 
     
     # Find n_sapp, or approximate effective n_sapp, using index result from RCWA object 
 # =============================================================================
@@ -237,7 +237,7 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
                 angles.append([polar,azimuthal])
                 index_map.append((kxi, kyi)) 
     
-    I_z_lambda_angle = I(sim, np.array(angles))
+    I_z_lambda_angle = I(params, sim, np.array(angles))
     sim.close() # Superfluous, but safe 
     gc.collect() 
     
@@ -314,16 +314,16 @@ def FoM(params, queue=None):
                 if d > best_D:
                     best_D = d 
                     best_result = {
-                        "best D" : d, 
+                        "best D" : float(d), 
                         "indices" : tuple(indices), 
                         "individual directivities" : tuple(indiv_d), 
-                        "individual depths" : tuple(z_range[i] for i in indices), 
+                        "individual depths" : tuple(round(1e6*float(z_range[i]-params['layer_thicknesses'][0]),3) for i in indices), 
                         "QW spacing" : z_range[N] - z_range[0] 
                             }
         return best_result
     
     best_results = find_max_D(D_z, min_zi_spacing, max_zi_spacing) 
-    print(f"Highest directivity is D={best_results['best D']:.3f}, with QWs at depths {' um, '.join(f'{1e6*(n-params['layer_thicknesses'][0]):.3f}' for n in best_results['individual depths'])} um (from sapphire)")
+    print(f"Highest directivity is D={best_results['best D']:.3f}, with QWs at depths {' um, '.join(f'{n:.3f}' for n in best_results['individual depths'])} um (from sapphire)")
      
     # For multithreading module 
     if queue != None: queue.put((best_results['best D'], best_results['individual depths']))
@@ -336,29 +336,31 @@ min_mesa_width = 50e-9
 #minimum_ribbon_thickness = 0.050e-6 
 c = 3e8 # Speed of light 
 
-#These didn't work:  
-params = {'Fourier_N': 50, 
-	     'wavelength_center': 4.8e-07, 
-	     'wavelength_FWHM': 2e-08, 
-	     'wavelength_points': 1, 
-	     'QW_xy_mesh': 90, 
-	     'QW_z_mesh': 55, 
-	     'k_mesh': 24, 
-	     'layer_count': 5, 
-	     'layer_names': ['sapp', 'uniform_GaN', 'etched_GaN', 'ITO', 'air'], 
-	     'layer_thicknesses': [1e-06, 2.738e-06, 8.19e-07, 1.2e-07, 1e-06], 
-	     'layer_materials': ['Al2O3 - Palik', 'GaN - custom', 'GaN - custom', 'ITO - custom', 'etch'], 
-	     'layer_is_etched': [False, False, True, True, False], 
-	     'QW_relative_intensities': [0.45, 0.33, 0.22], 
-	     'ribbon_count': 3, 
-	     'notch_count': 3, 
-	     'target_k': (0, 0), 
-	     'period': [6.89e-07, 6.63e-07], 
-	     'ribbon_centers': [1.25e-07, 2.91e-07, 5.73e-07], 
-	     'ribbon_widths': [1.4e-07, 6.5e-08, 1.44e-07], 
-	     'notch_centers': [1.07e-07, 3.41e-07, 5.35e-07], 
-	     'notch_widths': [1.11e-07, 8.5e-08, 1.05e-07]
-	     }
+# =============================================================================
+# #These didn't work:  
+# params = {'Fourier_N': 50, 
+# 	     'wavelength_center': 4.8e-07, 
+# 	     'wavelength_FWHM': 2e-08, 
+# 	     'wavelength_points': 1, 
+# 	     'QW_xy_mesh': 90, 
+# 	     'QW_z_mesh': 55, 
+# 	     'k_mesh': 24, 
+# 	     'layer_count': 5, 
+# 	     'layer_names': ['sapp', 'uniform_GaN', 'etched_GaN', 'ITO', 'air'], 
+# 	     'layer_thicknesses': [1e-06, 2.738e-06, 8.19e-07, 1.2e-07, 1e-06], 
+# 	     'layer_materials': ['Al2O3 - Palik', 'GaN - custom', 'GaN - custom', 'ITO - custom', 'etch'], 
+# 	     'layer_is_etched': [False, False, True, True, False], 
+# 	     'QW_relative_intensities': [0.45, 0.33, 0.22], 
+# 	     'ribbon_count': 3, 
+# 	     'notch_count': 3, 
+# 	     'target_k': (0, 0), 
+# 	     'period': [6.89e-07, 6.63e-07], 
+# 	     'ribbon_centers': [1.25e-07, 2.91e-07, 5.73e-07], 
+# 	     'ribbon_widths': [1.4e-07, 6.5e-08, 1.44e-07], 
+# 	     'notch_centers': [1.07e-07, 3.41e-07, 5.35e-07], 
+# 	     'notch_widths': [1.11e-07, 8.5e-08, 1.05e-07]
+# 	     }
+# =============================================================================
 
 # =============================================================================
 # # Test device 
@@ -388,21 +390,23 @@ params = {'Fourier_N': 50,
 #           }
 # =============================================================================
 
-k_inplane = np.linspace(-NA, +NA, params['k_mesh'])
-# Insert the exact target angle into kx, ky since the directivity might be too narrow to easily capture otherwise 
-target_k = params['target_k'] 
-kx_range = np.insert(k_inplane, np.searchsorted(k_inplane, target_k[0]), target_k[0]) 
-ky_range = np.insert(k_inplane, np.searchsorted(k_inplane, target_k[1]), target_k[1]) 
-
-tic = time.time()
-try: 
-    D, QWz = FoM(params) 
-except Exception as e:
-    print(type(e))
-    traceback.print_exc()
-    D, QWz = (0,(0,))
-toc = time.time()
-print(f"Took {toc-tic:.0f} seconds with Fourier N = {params['Fourier_N']} and k mesh = {params['k_mesh']}.")
+# =============================================================================
+# k_inplane = np.linspace(-NA, +NA, params['k_mesh'])
+# # Insert the exact target angle into kx, ky since the directivity might be too narrow to easily capture otherwise 
+# target_k = params['target_k'] 
+# kx_range = np.insert(k_inplane, np.searchsorted(k_inplane, target_k[0]), target_k[0]) 
+# ky_range = np.insert(k_inplane, np.searchsorted(k_inplane, target_k[1]), target_k[1]) 
+# 
+# tic = time.time()
+# try: 
+#     D, QWz = FoM(params) 
+# except Exception as e:
+#     print(type(e))
+#     traceback.print_exc()
+#     D, QWz = (0,(0,))
+# toc = time.time()
+# print(f"Took {toc-tic:.0f} seconds with Fourier N = {params['Fourier_N']} and k mesh = {params['k_mesh']}.")
+# =============================================================================
 
 # =============================================================================
 # # Prasad's unpatterned thin film 
