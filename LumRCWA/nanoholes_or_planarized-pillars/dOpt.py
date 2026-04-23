@@ -44,6 +44,7 @@ params_2d = {
           'QW_relative_intensities' : [0.45, 0.33, 0.22], # relative intensities of QWs 
           'layer_is_etched' : [False, False, True, True, False], # whether or not to etch through each layer to make the ribbons 
           #'QW_layer' : 2, # Which layer is the QW in: 0, 1, 2, ... The QW will be optimally placed within 50-300 nm of the bottom of this layer (assuming orientation is layer 0 on top)
+          'geometry' : 'holes', # Either 'holes' or 'pillars' 
           'hole_count' : 4, # For now, should be a perfect square (1, 4, 9, ...)
           'target_k' : (0, 0) # (kx, ky) 
           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
@@ -53,6 +54,9 @@ params_2d = {
           'hole_diameters' : [],     # every hole is allowed a different diameter 
           }
                            
+raise RuntimeWarning("You need to check that the materials (glass, air) are handled correctly in each layer, for both the holes and pillars cases. Use an index monitor or something.")
+print("Continuing in 10 seconds...")
+time.sleep(10) 
 
 min_period = params_2d['wavelength_center'] * 0.50 
 max_period = params_2d['wavelength_center'] * 1.50 

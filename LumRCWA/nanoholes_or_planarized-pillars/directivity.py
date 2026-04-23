@@ -76,56 +76,92 @@ def setup(params, sim, QW_z_limits, wavelengths):
                 )
             
         else: # If the layer is etched 
-            # First, add the full solid slab
-            sim.addrect()
-            sim.set("name", params['layer_names'][i])
-            configuration.append(
-                (params['layer_names'][i], (
-                    ("x min", 0), ("x max", params['period'][0]),
-                    ("y min", 0), ("y max", params['period'][1]),
-                    ("z min", sum(params['layer_thicknesses'][0:i])),
-                    ("z max", sum(params['layer_thicknesses'][0:i+1])),
-                    ("material", params['layer_materials'][i])
-                ))
-            )
-            # Then subtract each hole (material = "etch" = air/void)
-            for h in range(params['hole_count']):
-                sim.addcircle()
-                sim.set("name", f"{params['layer_names'][i]}, hole {h}")
+            if params['geometry'] == 'holes': 
+                # Hole version. First, add the full solid slab
+                sim.addrect()
+                sim.set("name", params['layer_names'][i])
                 configuration.append(
-                    (f"{params['layer_names'][i]}, hole {h}", (
-                        ("x", params['hole_centers_x'][h]),
-                        ("y", params['hole_centers_y'][h]),
-                        ("radius", params['hole_diameters'][h] / 2),
+                    (params['layer_names'][i], (
+                        ("x min", 0), ("x max", params['period'][0]),
+                        ("y min", 0), ("y max", params['period'][1]),
                         ("z min", sum(params['layer_thicknesses'][0:i])),
                         ("z max", sum(params['layer_thicknesses'][0:i+1])),
-                        ("material", "etch")
+                        ("material", params['layer_materials'][i])
                     ))
                 )
+                # Then subtract each hole (material = "etch" = air/void)
+                for h in range(params['hole_count']):
+                    sim.addcircle()
+                    sim.set("name", f"{params['layer_names'][i]}, hole {h}")
+                    configuration.append(
+                        (f"{params['layer_names'][i]}, hole {h}", (
+                            ("x", params['hole_centers_x'][h]),
+                            ("y", params['hole_centers_y'][h]),
+                            ("radius", params['hole_diameters'][h] / 2),
+                            ("z min", sum(params['layer_thicknesses'][0:i])),
+                            ("z max", sum(params['layer_thicknesses'][0:i+1])),
+                            ("material", "etch")
+                        ))
+                    )
+            elif params['geometry'] == 'pillars': 
+                # etched layer — pillar version
+                for h in range(params['hole_count']):  # reuse hole_count as pillar_count, or rename
+                    sim.addcircle()
+                    sim.set("name", f"{params['layer_names'][i]}, pillar {h}")
+                    configuration.append(
+                        (f"{params['layer_names'][i]}, pillar {h}", (
+                            ("x", params['hole_centers_x'][h]),
+                            ("y", params['hole_centers_y'][h]),
+                            ("radius", params['hole_diameters'][h] / 2),
+                            ("z min", sum(params['layer_thicknesses'][0:i])),
+                            ("z max", sum(params['layer_thicknesses'][0:i+1])),
+                            ("material", params['layer_materials'][i])  # GaN
+                        ))
+                    )
+            else: 
+                raise RuntimeError("'geometry' should be set to either 'holes' or 'pillars'.")
     
     for obj, parameters in configuration:
        for name, value in parameters:
            sim.setnamed(obj, name, value)
-           
+          
+    if params['geometry'] == 'pillars': 
+        sim.setnamed("RCWA", "background material", "SiO2 - Palik"),  # or whatever glass you're using
+    
     return 
 
 def QW_xy(params, x, y):
-    # Takes params, x, & y as arguments and returns Boolean (whether or not x,y is in QW emitting region) 
-    # Checked 2026-03-24 
-    nonemitting_thickness = 0.020e-6 
+    if params['geometry'] == 'holes': 
+        # Takes params, x, & y as arguments and returns Boolean (whether or not x,y is in QW emitting region) 
+        # Checked 2026-03-24 
+        nonemitting_thickness = 0.020e-6 
+        
+        if (params['hole_count'] == 0):
+                 return True 
+             
+        for h in range(params['hole_count']):
+            dx = x - params['hole_centers_x'][h]
+            dy = y - params['hole_centers_y'][h]
+            dist = np.sqrt(dx**2 + dy**2)
+            # Exclude the hole itself plus the non-emitting skin on its inner wall
+            if dist <= params['hole_diameters'][h] / 2 + nonemitting_thickness:
+                return False
     
-    if (params['hole_count'] == 0):
-             return True 
-         
-    for h in range(params['hole_count']):
-        dx = x - params['hole_centers_x'][h]
-        dy = y - params['hole_centers_y'][h]
-        dist = np.sqrt(dx**2 + dy**2)
-        # Exclude the hole itself plus the non-emitting skin on its inner wall
-        if dist <= params['hole_diameters'][h] / 2 + nonemitting_thickness:
-            return False
+        return True
+    elif params['geometry'] == 'pillars':
+        nonemitting_thickness = 0.020e-6
 
-    return True
+        if params['hole_count'] == 0:
+            return True
+
+        for h in range(params['hole_count']):
+            dx = x - params['hole_centers_x'][h]
+            dy = y - params['hole_centers_y'][h]
+            dist = np.sqrt(dx**2 + dy**2)
+            if dist <= params['hole_diameters'][h] / 2 - nonemitting_thickness:
+                return True
+
+        return False
 
 def I(params, sim, angles):
     
