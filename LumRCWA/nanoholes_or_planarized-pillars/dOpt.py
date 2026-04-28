@@ -52,6 +52,7 @@ params_2d = {
           'hole_centers_x' : [],     # x position of each hole center
           'hole_centers_y' : [],     # y position of each hole center
           'hole_diameters' : [],     # every hole is allowed a different diameter 
+          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$'][0] 
           }
                            
 raise RuntimeWarning("You need to check that the materials (glass, air) are handled correctly in each layer, for both the holes and pillars cases. Use an index monitor or something.")

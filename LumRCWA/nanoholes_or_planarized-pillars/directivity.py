@@ -7,13 +7,13 @@ Created on Tue Mar  3 13:33:33 2026
 """
 import sys, os, psutil 
 
-sys.path.append("/opt/lumerical/v241/api/python") 
+sys.path.append("/opt/lumerical/v2*1/api/python") 
 sys.path.append(os.path.dirname(__file__)) 
 import lumapi
 
 import numpy as np
 #import h5py
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import gc
 import time 
 import traceback 
@@ -22,7 +22,7 @@ import traceback
 def mem(): # Helper function for tracking where the memory usage spikes 
     return psutil.Process(os.getpid()).memory_info().rss / 1e9
 
-def setup(params, sim, QW_z_limits, wavelengths): 
+def setup(params, sim, QW_z_limits, lam): 
     
     # Clear anything left over from previous runs 
     sim.switchtolayout() 
@@ -43,7 +43,7 @@ def setup(params, sim, QW_z_limits, wavelengths):
             ("y min", 0), ("y max", params['period'][1]),
             ("z min", 0), ("z max", sum(params['layer_thicknesses'][:])),
             # set excitation wavelength here (M-point broadband is an option) 
-            ("frequency points", len(wavelengths)), ("custom frequency samples", c/wavelengths),
+            ("frequency points", 1), ("custom frequency samples", c/lam),
             # Set RCWA interfaces 
             ("interface absolute positions", np.array([sum(params['layer_thicknesses'][0:i]) for i in range(1, params['layer_count'])])), 
             # Set the number of k vectors to use in the RCWA solver 
@@ -191,25 +191,21 @@ def I(params, sim, angles):
     sim.close()
     gc.collect() 
     
-    # indices are x, y, z, lambda, angle, vector-components 
-    # Loop over x, y -> if x,y in QWxy: calculate I_z -> set column of I_ky_ky_z to I_z 
-    I_z_lambda_angle = np.zeros((params['QW_z_mesh'], params['wavelength_points'], len(angles))) 
+    # indices are x, y, z, lambda, angle
+    # Loop over x, y -> if x,y in QWxy: calculate I_z -> set column of I_z_angle to I_z 
+    I_z_angle_spol = np.zeros((params['QW_z_mesh'], len(angles))) 
+    I_z_angle_ppol = np.zeros((params['QW_z_mesh'], len(angles)))  
     
     for xi in range(len(Es['x'])):
         for yi in range(len(Es['y'])):
             if QW_xy(params, Es['x'][xi], Es['y'][yi]):
-                I_z_lambda_angle += np.abs(Es['Ex'][xi,yi,:,:,:])**2 + np.abs(Es['Ey'][xi,yi,:,:,:])**2
-                I_z_lambda_angle += np.abs(Ep['Ex'][xi,yi,:,:,:])**2 + np.abs(Ep['Ey'][xi,yi,:,:,:])**2 
+                I_z_angle_spol += np.abs(Es['Ex'][xi,yi,:,0,:])**2 + np.abs(Es['Ey'][xi,yi,:,0,:])**2
+                I_z_angle_ppol += np.abs(Ep['Ex'][xi,yi,:,0,:])**2 + np.abs(Ep['Ey'][xi,yi,:,0,:])**2 
                 # Sum intensity of in-plane componants 
     
-    return I_z_lambda_angle #, z_range 
+    return np.stack((I_z_angle_spol, I_z_angle_ppol), axis=-1) #, z_range 
 
 def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
-    # Initialize 
-    I_z_lambda_angle = np.zeros((len(kx_range), len(ky_range), params['QW_z_mesh'])) 
-    
-    sim = lumapi.FDTD(hide=False) 
-    setup(params, sim, QW_z_limits, wavelengths) 
     
     # Find n_sapp, or approximate effective n_sapp, using index result from RCWA object 
 # =============================================================================
@@ -221,6 +217,7 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
 #     n_sapp = np.real(sim.getresult("RCWA", "index")['index_z'][0,0,0,0])  
 # =============================================================================
     # But this is even faster    
+    sim = lumapi.FDTD(hide=False) 
     n_sapp = np.real(sim.getindex(params['layer_materials'][0], c/wavelengths[0])[0][0])
     
 
@@ -246,19 +243,31 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
                 angles.append([polar,azimuthal])
                 index_map.append((kxi, kyi)) 
     
-    I_z_lambda_angle = I(params, sim, np.array(angles))
-    sim.close() # Superfluous, but safe 
-    gc.collect() 
+    # Initialize 
+    I_z_lambda_angle_pol = np.zeros((params['QW_z_mesh'], len(wavelengths), len(angles), 2)) 
     
-    # Now I just need to unpack I_z_lambda_angle into a kx-by-ky matrix 
-    I_kx_ky_z_lambda = np.zeros((len(kx_range),len(ky_range)) + np.shape(I_z_lambda_angle)[:-1])
+    for li in range(len(wavelengths)):
+        lam = wavelengths[li]
+        
+        try: 
+            sim.eval('')
+        except: 
+            sim = lumapi.FDTD(hide=False) 
+        setup(params, sim, QW_z_limits, lam) 
+    
+        I_z_lambda_angle_pol[:,li,:,:] = I(params, sim, np.array(angles))
+        sim.close() # Superfluous, but safe 
+        gc.collect() 
+    
+    # Now I just need to unpack I_z_lambda_angle_pol into a kx-by-ky matrix 
+    I_kx_ky_z_lambda_pol = np.zeros((len(kx_range),len(ky_range)) + np.shape(I_z_lambda_angle_pol)[:-2] + (2,))
     for i, (kxi, kyi) in enumerate(index_map):
-        I_kx_ky_z_lambda[kxi,kyi,:,:] = I_z_lambda_angle[:,:,i]
+        I_kx_ky_z_lambda_pol[kxi,kyi,:,:,:] = I_z_lambda_angle_pol[:,:,i,:]
         #heatmap[kxi, kyi, :] = E[..., i]
             
-    return I_kx_ky_z_lambda
+    return I_kx_ky_z_lambda_pol
 
-def FoM(params, queue=None):
+def FoM(params, queue=None, plot=False):
     
     # Make the array of evenly-spaced wavelengths and the associated weights 
     if params['wavelength_points'] == 1:
@@ -276,21 +285,22 @@ def FoM(params, queue=None):
     # Stephen says p-GaN is usually 50-300 nm thick 
     QW_z_limits = sum(params['layer_thicknesses'][:-2]) - np.array([0.300e-6, 0.050e-6]) 
     
-    I_kx_ky_z_lambda = RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths)
+    I_kx_ky_z_lambda_pol = RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths)
     
     # Apply weights to the different wavelengths calculated 
     def Gaussian_lineshape(x, x0, FWHM):
         return np.array(1 * np.exp(-(x-x0)**2 / (FWHM**2 / (4*np.log(2))))) 
     wavelength_weights = Gaussian_lineshape(wavelengths, params['wavelength_center'], params['wavelength_FWHM']) 
-    I_kx_ky_z = np.zeros(np.shape(I_kx_ky_z_lambda)[:-1])
+    I_kx_ky_z_pol = np.zeros(np.shape(I_kx_ky_z_lambda_pol)[:-2] + (2,))
     for i in range(len(wavelengths)):
-        I_kx_ky_z += I_kx_ky_z_lambda[:,:,:,i] * wavelength_weights[i] 
+        I_kx_ky_z_pol += I_kx_ky_z_lambda_pol[:,:,:,i,:] * wavelength_weights[i] 
     
     # Calculate dual-pol directivity as a function of QW depth 
-    I_target_z = I_kx_ky_z[np.where(kx_range == target_k[0])[0][0], np.where(ky_range == target_k[1])[0][0], :]
-    I_avg_z = np.trapezoid( np.trapezoid(I_kx_ky_z, x = kx_range, axis = 0) / (kx_range[-1] - kx_range[0]), x = ky_range, axis = 0) / (ky_range[-1] - ky_range[0])
-    I_avg_z *= np.size(I_kx_ky_z[:,:,0]) / np.size(np.nonzero(I_kx_ky_z[:,:,0])[0]) # To account for all the I=0 values at k|| > NA; verified 2024-11-05 in S4 version 
-    D_z = I_target_z / I_avg_z
+    I_target_z_pol = I_kx_ky_z_pol[np.where(kx_range == target_k[0])[0][0], np.where(ky_range == target_k[1])[0][0], :, :]
+    I_avg_z_pol = np.trapezoid( np.trapezoid(I_kx_ky_z_pol, x = kx_range, axis = 0) / (kx_range[-1] - kx_range[0]), x = ky_range, axis = 0) / (ky_range[-1] - ky_range[0])
+    I_avg_z_pol *= np.size(I_kx_ky_z_pol[:,:,0,:]) / np.size(np.nonzero(I_kx_ky_z_pol[:,:,0,:])[0]) # To account for all the I=0 values at k|| > NA; verified 2024-11-05 in S4 version 
+    D_z_pol = I_target_z_pol / I_avg_z_pol
+    
     # This ends up the same as z_range = sim.getresult("monitor", "Es")['z']
     z_range = np.linspace(QW_z_limits[0], QW_z_limits[1], params['QW_z_mesh']) 
     
@@ -301,42 +311,78 @@ def FoM(params, queue=None):
     max_zi_spacing = int(15e-9 // (z_range[1] - z_range[0])) 
     min_zi_spacing = int(7e-9 // (z_range[1] - z_range[0])) + 1
     
-    def find_max_D(D_z, min_zi_spacing, max_zi_spacing):
-        best_D = 0.0
-        best_depths = None
+    def find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing):
+        best_FoM = 0.0
 
         for N in range(min_zi_spacing, max_zi_spacing+1):
             if N * (len(params['QW_relative_intensities']) - 1) >= params['QW_z_mesh']:
                 continue
 
             for i in range(params['QW_z_mesh'] - N * (len(params['QW_relative_intensities']) - 1)):
-                d = 0 #D_z[i] + D_z[i+N] + D_z[i+2*N] 
+                fom = 0 #D_z[i] + D_z[i+N] + D_z[i+2*N] 
                 indices = [] 
-                indiv_d= []
+                indiv_fom = []
 
                 for j in range(len(params['QW_relative_intensities'])): 
                     idx = i + j * N
-                    d += D_z[idx] * params['QW_relative_intensities'][j] 
-                    indices.append(idx) 
-                    indiv_d.append(D_z[idx] * params['QW_relative_intensities'][j]) 
-
-                if d > best_D:
-                    best_D = d 
+                    if params['FoM_definition'] == '$D_s+D_p$':
+                        fom += np.sum(D_z_pol, axis=-1)[idx] * params['QW_relative_intensities'][j] 
+                        indices.append(idx) 
+                        indiv_fom.append(np.sum(D_z_pol, axis=-1)[idx] * params['QW_relative_intensities'][j]) 
+                    elif params['FoM_definition'] == '$D_s D_p / (D_s + D_p)$': 
+                        D_s = D_z_pol[:,0]
+                        D_p = D_z_pol[:,1] 
+                        fom += ((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] 
+                        indices.append(idx) 
+                        indiv_fom.append(((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] )
+                    else: 
+                        raise RuntimeError("Please choose an acceptable FoM definition")
+                if fom > best_FoM:
+                    best_FoM = fom 
                     best_result = {
-                        "best D" : float(d), 
-                        "indices" : tuple(indices), 
-                        "individual directivities" : tuple(indiv_d), 
-                        "individual depths" : tuple(round(1e6*float(z_range[i]-params['layer_thicknesses'][0]),3) for i in indices), 
+                        "best FoM" : float(fom), 
+                        "QW indices" : tuple(indices), 
+                        "QW individual FoMs" : tuple(indiv_fom), 
+                        "QW individual depths" : tuple(round(1e6*float(z_range[i]-params['layer_thicknesses'][0]),3) for i in indices), 
                         "QW spacing" : z_range[N] - z_range[0] 
                             }
         return best_result
     
-    best_results = find_max_D(D_z, min_zi_spacing, max_zi_spacing) 
-    print(f"Highest directivity is D={best_results['best D']:.3f}, with QWs at depths {' um, '.join(f'{n:.3f}' for n in best_results['individual depths'])} um (from sapphire)")
-     
+    best_results = find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing) 
+    print(f"Highest directivity is {params['FoM_definition']}={best_results['best FoM']:.3f}, with QWs at depths {' um, '.join(f'{n:.3f}' for n in best_results['QW individual depths'])} um (from sapphire)")
+    
     # For multithreading module 
     if queue != None: queue.put((best_results['best D'], best_results['individual depths']))
     
+    if plot: 
+        I_kx_ky_pol = np.sum([params['QW_relative_intensities'][i]*I_kx_ky_z_pol[:,:,best_results['QW indices'][i],:] for i in range(len(params['QW_relative_intensities']))], axis=0)
+        
+        # s-pol 
+        D_s = sum([D_z_pol[best_results['QW indices'][i],0]*params['QW_relative_intensities'][i] for i in range(len(params['QW_relative_intensities']))])
+        plt.imshow((I_kx_ky_pol[:,:,0].T), extent = [kx_range[0], kx_range[-1], ky_range[0], ky_range[-1]], cmap = 'inferno')
+        plt.xlabel('$k_x$/$k_0$')
+        plt.ylabel('$k_y$/$k_0$')
+        plt.title(f's-pol emission, $D_s$={D_s:.3f} \nWavelength = {params["wavelength_center"]*1e9:n} nm, FWHM = {(0 if params["wavelength_points"]==1 else params["wavelength_FWHM"])*1e9:n} nm')
+        plt.colorbar() 
+        plt.show()
+        
+        # p-pol 
+        D_p = sum([D_z_pol[best_results['QW indices'][i],1]*params['QW_relative_intensities'][i] for i in range(len(params['QW_relative_intensities']))])
+        plt.imshow((I_kx_ky_pol[:,:,1].T), extent = [kx_range[0], kx_range[-1], ky_range[0], ky_range[-1]], cmap = 'inferno')
+        plt.xlabel('$k_x$/$k_0$')
+        plt.ylabel('$k_y$/$k_0$')
+        plt.title(f'p-pol emission, $D_p$={D_p:.3f} \nWavelength = {params["wavelength_center"]*1e9:n} nm, FWHM = {(0 if params["wavelength_points"]==1 else params["wavelength_FWHM"])*1e9:n} nm')
+        plt.colorbar() 
+        plt.show()
+        
+        # dual-pol 
+        plt.imshow((np.sum(I_kx_ky_pol, axis=-1).T), extent = [kx_range[0], kx_range[-1], ky_range[0], ky_range[-1]], cmap = 'inferno')
+        plt.xlabel('$k_x$/$k_0$')
+        plt.ylabel('$k_y$/$k_0$')
+        plt.title(f'dual-pol emission, {params["FoM_definition"]}={best_results["best FoM"]:.3f} \nWavelength = {params["wavelength_center"]*1e9:n} nm, FWHM = {(0 if params["wavelength_points"]==1 else params["wavelength_FWHM"])*1e9:n} nm')
+        plt.colorbar() 
+        plt.show()
+        
     return (best_results['best D'], best_results['individual depths']) 
 
 NA = 1.3
