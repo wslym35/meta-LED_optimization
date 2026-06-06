@@ -7,7 +7,8 @@ Created on Tue Mar  3 13:33:33 2026
 """
 import sys, os, psutil 
 
-sys.path.append("/opt/lumerical/v2*1/api/python") 
+sys.path.append("/opt/lumerical/v251/api/python") # for laptop
+sys.path.append("/opt/lumerical/v241/api/python") # for desktop 
 sys.path.append(os.path.dirname(__file__)) 
 import lumapi
 
@@ -18,6 +19,11 @@ import gc
 import time 
 import traceback 
 
+NA = 1.3
+#from dOpt import min_mesa_width 
+min_mesa_width = 50e-9 
+#minimum_ribbon_thickness = 0.050e-6 
+c = 3e8 # Speed of light 
 
 def mem(): # Helper function for tracking where the memory usage spikes 
     return psutil.Process(os.getpid()).memory_info().rss / 1e9
@@ -191,10 +197,15 @@ def I(params, sim, angles):
     for xi in range(len(Es['x'])):
         for yi in range(len(Es['y'])):
             if QW_xy(params, Es['x'][xi], Es['y'][yi]):
+                # Sum intensity of in-plane componants 
                 I_z_angle_spol += np.abs(Es['Ex'][xi,yi,:,0,:])**2 + np.abs(Es['Ey'][xi,yi,:,0,:])**2
                 I_z_angle_ppol += np.abs(Ep['Ex'][xi,yi,:,0,:])**2 + np.abs(Ep['Ey'][xi,yi,:,0,:])**2 
-                # Sum intensity of in-plane componants 
-    
+                # Sum intensity of out-of-plane componants 
+# =============================================================================
+#                 I_z_angle_spol += np.abs(Es['E'][xi,yi,:,0,:,2])**2 
+#                 I_z_angle_ppol += np.abs(Ep['E'][xi,yi,:,0,:,2])**2
+# =============================================================================
+
     return np.stack((I_z_angle_spol, I_z_angle_ppol), axis=-1) #, z_range 
 
 def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
@@ -276,7 +287,11 @@ def FoM(params, queue=None, plot=False):
     ky_range = np.insert(k_inplane, np.searchsorted(k_inplane, target_k[1]), target_k[1]) 
     
     # Stephen says p-GaN is usually 50-300 nm thick 
-    QW_z_limits = sum(params['layer_thicknesses'][:-2]) - np.array([0.300e-6, 0.050e-6]) 
+    try: 
+        QW_z_limits = params['QW_z_limits']
+        print("\nWARNING: Using QW_z limits established in the parameter set is not ideal for optimization.\n")
+    except: 
+        QW_z_limits = sum(params['layer_thicknesses'][:-2]) - np.array([0.300e-6, 0.050e-6]) 
     
     I_kx_ky_z_lambda_pol = RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths)
     
@@ -328,6 +343,12 @@ def FoM(params, queue=None, plot=False):
                         fom += ((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] 
                         indices.append(idx) 
                         indiv_fom.append(((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] )
+                    elif params['FoM_definition'] == '$D_s + D_p - |D_s - D_p|$':
+                        D_s = D_z_pol[:,0]
+                        D_p = D_z_pol[:,1] 
+                        fom += (D_s + D_p - np.abs(D_s - D_p))[idx] * params['QW_relative_intensities'][j] 
+                        indices.append(idx) 
+                        indiv_fom.append((D_s + D_p - np.abs(D_s - D_p))[idx] * params['QW_relative_intensities'][j] )
                     else: 
                         raise RuntimeError("Please choose an acceptable FoM definition")
                 if fom > best_FoM:
@@ -380,12 +401,36 @@ def FoM(params, queue=None, plot=False):
     return (best_results['best FoM'], best_results['QW individual depths']) 
 
     
-
-NA = 1.3
-#from dOpt import min_mesa_width 
-min_mesa_width = 50e-9 
-#minimum_ribbon_thickness = 0.050e-6 
-c = 3e8 # Speed of light 
+# =============================================================================
+# # Results of optimization in S4 
+# params_2d = {
+#           'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
+#           'wavelength_center' : 470e-9, 
+#           'wavelength_FWHM' : 20e-9, 
+#           'wavelength_points' : 1, 
+#           'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
+#           'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
+#           'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
+#           'layer_count' : 4, 
+#           'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
+#           'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
+#           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
+#           #'QW_count' : 3, 
+#           'QW_relative_intensities' : [1], # relative intensities of QWs 
+#           'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
+#           'ribbon_count' : 1, # number of nanoribbons to etch 
+#           'notch_count' : 1, 
+#           'target_k' : (0, 0) # (kx, ky) 
+#           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+#           , 'period' : [698e-9, 691e-9], # um 
+#           'ribbon_centers' : [300e-9], 
+#           'ribbon_widths' : [220e-9],  
+#           'notch_centers' : [300e-9], 
+#           'notch_widths' : [444e-9], 
+#           'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
+#           }
+# FoM(params_2d, plot=True) 
+# =============================================================================
 
 # =============================================================================
 # #These didn't work:  
@@ -480,33 +525,75 @@ c = 3e8 # Speed of light
 # #directivity.FoM_2d(params_2d)
 # =============================================================================
            
+# Larry's case 5 (dual-pol optimized metasurface) 
+params = {} 
+params['wavelength_center'] = 1080e-9 
+params['wavelength_points'] = 1 
+params['wavelength_FWHM'] = 1e-9
+params['layer_count'] = 3 
+params['layer_names'] = ['sapp', 'GaN', 'air'] # reciprocity plane waves are incident from first layer 
+params['layer_thicknesses'] = [1e-6, 0.996e-6, 1e-6] # GaN thickness can be variable param 
+params['layer_materials'] = ["Al2O3 - Palik", "GaN - custom", "etch"]
+params['layer_is_etched'] = [False, True, False] # whether or not to etch through each layer to make the ribbons 
+params['ribbon_count'] = 3 # number of nanoribbons to etch 
+params['notch_count'] = 0 
+params['target_k'] = (0, 0) # (kx, ky) 
+# The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+params['period'] = [0.540e-6, 0.540e-6] # um 
+params['ribbon_centers'] = [0.065e-6, 0.215e-6, 0.435e-6] 
+params['ribbon_widths'] = [0.050e-6, 0.070e-6, 0.110e-6]  
+params['notch_centers'] = [] 
+params['notch_widths'] = [] 
+params['QW_relative_intensities'] = [1] 
+params['FoM_definition'] = '$D_s+D_p$'
+
+params['QW_z_limits'] = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6),
+               params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6)]
+params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
+params['QW_z_mesh'] = 5 
+params['QW_xy_mesh'] = 90 
+params['k_mesh'] = 24 
+params['Fourier_N'] = 50 
+#params_2d['notch_depths'] = []
+#QW_depth = 0.996 - (0.120 + 0.003) # measured from first layer (sapp.)
+
 # =============================================================================
-# # Larry's dual-pol optimized metasurface
-# params['wavelength_center'] = 540e-9 
-# params['wavelength_points'] = 1 
-# params['layer_count'] = 3 
-# params['layer_names'] = ['sapp', 'GaN', 'air'] # reciprocity plane waves are incident from first layer 
-# params['layer_thicknesses'] = [1e-6, 0.996e-6, 1e-6] # GaN thickness can be variable param 
-# params['layer_materials'] = ["Al2O3 - Palik", "GaN - custom", "etch"]
-# params['layer_is_etched'] = [False, True, False] # whether or not to etch through each layer to make the ribbons 
-# params['ribbon_count'] = 3 # number of nanoribbons to etch 
+# # Larry's case 1
+# params['ribbon_count'] = 2 # number of nanoribbons to etch 
 # params['notch_count'] = 0 
 # params['target_k'] = (0, 0) # (kx, ky) 
 # # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
 # params['period'] = [0.540e-6, 0.540e-6] # um 
-# params['ribbon_centers'] = [0.065e-6, 0.215e-6, 0.435e-6] 
-# params['ribbon_widths'] = [0.050e-6, 0.070e-6, 0.110e-6]  
+# params['ribbon_centers'] = [0.133e-6, 0.410e-6] 
+# params['ribbon_widths'] = [0.145e-6, 0.190e-6]  
 # params['notch_centers'] = [] 
 # params['notch_widths'] = [] 
-# 
-# QW_z_limits = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6),
-#                params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6)]
-# params['QW_z_mesh'] = 25 
-# params['QW_xy_mesh'] = 50 # params['k_mesh'] = 24 
-# #params_2d['notch_depths'] = []
-# #QW_depth = 0.996 - (0.120 + 0.003) # measured from first layer (sapp.)
+# params['QW_relative_intensities'] = [1] 
+# params['FoM_definition'] = '$D_s+D_p$'
+# params['QW_z_limits'] = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.070e-6 + 0.003e-6),
+#                params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.070e-6 + 0.003e-6)]
+# params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
 # =============================================================================
 
+# =============================================================================
+# # Larry's case 2
+# params['ribbon_count'] = 3 # number of nanoribbons to etch 
+# params['notch_count'] = 0 
+# params['target_k'] = (-0.34, 0) # (kx, ky) 
+# # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+# params['period'] = [0.805e-6, 0.540e-6] # um 
+# params['ribbon_centers'] = [0.120e-6, 0.395e-6, 0.662e-6] 
+# params['ribbon_widths'] = [0.140e-6, 0.170e-6, 0.235e-6]  
+# params['notch_centers'] = [] 
+# params['notch_widths'] = [] 
+# params['QW_relative_intensities'] = [1] 
+# params['FoM_definition'] = '$D_s+D_p$'
+# params['QW_z_limits'] = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.170e-6 + 0.003e-6),
+#                params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.170e-6 + 0.003e-6)]
+# params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
+# =============================================================================
+
+FoM(params, plot=True) 
         
 # =============================================================================
 # # Test device

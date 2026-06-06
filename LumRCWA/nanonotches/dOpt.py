@@ -40,10 +40,8 @@ params_2d = {
           'layer_names' : ['sapp', 'uniform_GaN', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
           'layer_thicknesses' : [1e-6, None, None, 0.120e-6, 1e-6], # GaN thicknesses can be variable param 
           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", "GaN - custom", 'ITO - custom', 'etch'],
-          #'QW_count' : 3, 
           'QW_relative_intensities' : [0.45, 0.33, 0.22], # relative intensities of QWs 
           'layer_is_etched' : [False, False, True, True, False], # whether or not to etch through each layer to make the ribbons 
-          #'QW_layer' : 2, # Which layer is the QW in: 0, 1, 2, ... The QW will be optimally placed within 50-300 nm of the bottom of this layer (assuming orientation is layer 0 on top)
           'ribbon_count' : 1, # number of nanoribbons to etch 
           'notch_count' : 1, 
           'target_k' : (0, 0) # (kx, ky) 
@@ -53,9 +51,36 @@ params_2d = {
           'ribbon_widths' : [],  
           'notch_centers' : [], 
           'notch_widths' : [], 
-          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$'][0] 
+          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
           }
-                           
+# =============================================================================
+# params_2d = {
+#           'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
+#           'wavelength_center' : 470e-9, 
+#           'wavelength_FWHM' : 20e-9, 
+#           'wavelength_points' : 1, 
+#           'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
+#           'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
+#           'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
+#           'layer_count' : 4, 
+#           'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
+#           'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
+#           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
+#           #'QW_count' : 3, 
+#           'QW_relative_intensities' : [1], # relative intensities of QWs 
+#           'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
+#           'ribbon_count' : 1, # number of nanoribbons to etch 
+#           'notch_count' : 1, 
+#           'target_k' : (0, 0) # (kx, ky) 
+#           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+#           , 'period' : [698e-9, 691e-9], # um 
+#           'ribbon_centers' : [300e-9], 
+#           'ribbon_widths' : [220e-9],  
+#           'notch_centers' : [300e-9], 
+#           'notch_widths' : [444e-9], 
+#           'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
+#           }
+# =============================================================================
 
 min_period = params_2d['wavelength_center'] * 0.50 
 max_period = params_2d['wavelength_center'] * 1.50 
@@ -98,6 +123,11 @@ for n in range(params_2d['notch_count']):
 # Allow for optimizable GaN thickness 
 var_2d.append({'name':'uniform_GaN_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [2.0e-6, 4.0e-6]]}) # Dro suggests UID thickness of >=2 um to recover morphology. Double that is a convinient max.  
 var_2d.append({'name':'etched_GaN_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.500e-6, 1.100e-6]]}) # This is probably close to the max you can etch and still get reasonable verticality 
+# =============================================================================
+# var_2d.append({'name':'total_GaN_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.500e-6, 2.0e-6]]}) 
+# var_2d.append({'name':'ITO_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.100e-6, 0.140e-6]]}) 
+# =============================================================================
+
 
 constraints = [ ] 
 for r in range(params_2d['ribbon_count']):
@@ -173,12 +203,20 @@ def D_opt(dim, variables, params, constraints, trials):
         #params['notch_depths'] = []
         for n in [v['name'] for v in variables]:
             if n[-9:] == 'thickness': 
-                if n[:3] == 'uni': 
-                    params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
-                elif n[:3] == 'etc': 
-                    params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
-                else:
-                    print("Uh oh, that's not a valid thickness parameter name!")
+                if params['layer_count'] == 5:
+                    if n[:3] == 'uni': 
+                        params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'etc': 
+                        params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
+                    else:
+                        raise RuntimeWarning("Uh oh, that's not a valid thickness parameter name!")
+                elif params['layer_count'] == 4:
+                    if n[:3] == 'tot': 
+                        params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'ITO': 
+                        params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
+                    else:
+                        raise RuntimeWarning("Uh oh, that's not a valid thickness parameter name!")
             if n == 'GaN_thickness':
                 raise ValueError("This case (only one GaN layer) needs to be checked and probably modified. 2026/04/20")
                 #params['layer_thicknesses'][1] = np.round(parameterization.get(n), 3)
@@ -234,7 +272,8 @@ def D_opt(dim, variables, params, constraints, trials):
     print(trials_df) 
     
     best_input, best_output = ax_client.get_best_parameters() 
-    print(best_input) 
+    params.update(best_input) 
+    print(params) 
     means, covariances = best_output 
     print(means) 
     

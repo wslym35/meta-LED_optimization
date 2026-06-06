@@ -10,16 +10,14 @@ import numpy as np
 import os 
 import sys 
 import directivity 
-from pathlib import Path
 
-current_path = Path(os.getcwd()).resolve()
-results_dir = os.path.join(current_path.parent.parent, 'results') #'/home/*/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/results'
-date = '2026-04-27' 
+results_folder = '/home/quadrupole/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/results'
+date = '2026-05-15' 
 filename = 'data.npy'
-data = np.load(os.path.join(results_dir, date, filename), allow_pickle = True) 
-sys.path.append(os.path.join(results_dir, date)) # For the next line 
+data = np.load(os.path.join(results_folder, date, filename), allow_pickle = True) 
+sys.path.append(os.path.join(results_folder, date)) 
 from best_params import opt_params 
-FoM = '$D_s+D_p$'#'$D_s + D_p$ '#'- |D_s - D_p|$'#'$D_{s+p}$' #'$(D_s D_p) / (D_s + D_p)$'
+#FoM = '$D_s+D_p$'#'$D_s + D_p$ '#'- |D_s - D_p|$'#'$D_{s+p}$' #'$(D_s D_p) / (D_s + D_p)$'
 
 def plot_optimization(data, save = False):
     
@@ -34,16 +32,23 @@ def plot_optimization(data, save = False):
     ax.set_box_aspect(1) 
     plt.xlabel('Trial #')
     plt.ylabel('FoM') 
-    plt.title('Results of ' + date + ' optimization \nFoM = ' + FoM) 
+    plt.title('Results of ' + date + ' optimization \nFoM = ' + opt_params['FoM_definition']) 
     if save: 
-        plt.savefig(os.path.join(results_dir, date, 'convergence.png'), dpi=300, bbox_inches='tight')  
+        plt.savefig(os.path.join(results_folder, date, 'convergence.png'), dpi=300, bbox_inches='tight')  
     plt.show() 
 
 
-plot_optimization(data, False) 
+plot_optimization(data, save=False) 
 #plt.plot([i for i in range(len(data))], data[:,0],'o')
 #plt.show() 
 
-opt_params['wavelength_points'] = 1
-opt_params['wavelength_FWHM'] = 100e-9
-directivity.FoM(opt_params, plot=True) 
+# =============================================================================
+# opt_params['wavelength_center'] = 480e-9
+# opt_params['wavelength_points'] = 1
+# opt_params['wavelength_FWHM'] = 100e-9
+# =============================================================================
+# =============================================================================
+# opt_params['layer_thicknesses'][1] -= 50e-9
+# opt_params['layer_thicknesses'][2] += 50e-9 
+# directivity.FoM(opt_params, plot=True) 
+# =============================================================================

@@ -7,7 +7,8 @@ Created on Tue Mar  3 13:33:33 2026
 """
 import sys, os, psutil 
 
-sys.path.append("/opt/lumerical/v2*1/api/python") 
+sys.path.append("/opt/lumerical/v251/api/python") 
+sys.path.append("/opt/lumerical/v241/api/python") 
 sys.path.append(os.path.dirname(__file__)) 
 import lumapi
 
