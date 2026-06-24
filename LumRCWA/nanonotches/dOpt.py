@@ -51,7 +51,7 @@ params_2d = {
           'ribbon_widths' : [],  
           'notch_centers' : [], 
           'notch_widths' : [], 
-          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
+          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][0] 
           }
 # =============================================================================
 # params_2d = {
@@ -125,8 +125,8 @@ var_2d.append({'name':'uniform_GaN_thickness', 'value_type' : 'int', 'type':'ran
 var_2d.append({'name':'etched_GaN_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.500e-6, 1.100e-6]]}) # This is probably close to the max you can etch and still get reasonable verticality 
 # =============================================================================
 # var_2d.append({'name':'total_GaN_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.500e-6, 2.0e-6]]}) 
-# var_2d.append({'name':'ITO_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.100e-6, 0.140e-6]]}) 
 # =============================================================================
+#var_2d.append({'name':'ITO_thickness', 'value_type' : 'int', 'type':'range', 'bounds':[round(scale * el) for el in [0.100e-6, 0.140e-6]]}) 
 
 
 constraints = [ ] 
@@ -208,27 +208,29 @@ def D_opt(dim, variables, params, constraints, trials):
                         params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
                     elif n[:3] == 'etc': 
                         params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'ITO': 
+                        params['layer_thicknesses'][3] = round(parameterization.get(n) / scale, 9) 
                     else:
-                        raise RuntimeWarning("Uh oh, that's not a valid thickness parameter name!")
+                        raise RuntimeWarning("Uh oh, {n} is not a valid thickness parameter name!")
                 elif params['layer_count'] == 4:
                     if n[:3] == 'tot': 
                         params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
                     elif n[:3] == 'ITO': 
                         params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
                     else:
-                        raise RuntimeWarning("Uh oh, that's not a valid thickness parameter name!")
-            if n == 'GaN_thickness':
-                raise ValueError("This case (only one GaN layer) needs to be checked and probably modified. 2026/04/20")
+                        raise RuntimeWarning("Uh oh, {n} is not a valid thickness parameter name!")
+# =============================================================================
+#             if n == 'GaN_thickness':
+#                 raise ValueError("This case (only one GaN layer) needs to be checked and probably modified. 2026/04/20")
+# =============================================================================
                 #params['layer_thicknesses'][1] = np.round(parameterization.get(n), 3)
             # If the last character is a number, use it as an index to set the params
             # Round because we can't fab with greater than 1 nm accuracy anyway; in fact, the limit is more like 10 nm 
-            if n[-1].isdigit():
+            elif n[-1].isdigit():
                 params[n[:-2]].append(round(parameterization.get(n) / scale, 9)) 
-# =============================================================================
-#             else:
-#                 print('\n\nEntering the else statement\n\n') 
-#                 params[n].append(parameterization.get(n)) 
-# =============================================================================
+            else:
+                raise RuntimeWarning(f"Uh oh, {n} is not a valid parameter name!")
+                
         print("\n Printing params now: ")
         print(params) # Test that it works, and provide backup output channel 
 # =============================================================================

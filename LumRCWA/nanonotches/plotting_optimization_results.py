@@ -12,11 +12,12 @@ import sys
 import directivity 
 
 results_folder = '/home/quadrupole/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/results'
-date = '2026-05-15' 
-filename = 'data.npy'
-data = np.load(os.path.join(results_folder, date, filename), allow_pickle = True) 
-sys.path.append(os.path.join(results_folder, date)) 
-from best_params import opt_params 
+date = '2026-06-22' 
+data_filename = 'data.npy'
+data = np.load(os.path.join(results_folder, date, data_filename), allow_pickle = True) 
+#sys.path.append(os.path.join(results_folder, date)) 
+params_filename = 'opt_params.npy'
+opt_params = np.load(os.path.join(results_folder, date, params_filename), allow_pickle = True).item() 
 #FoM = '$D_s+D_p$'#'$D_s + D_p$ '#'- |D_s - D_p|$'#'$D_{s+p}$' #'$(D_s D_p) / (D_s + D_p)$'
 
 def plot_optimization(data, save = False):
@@ -50,5 +51,5 @@ plot_optimization(data, save=False)
 # =============================================================================
 # opt_params['layer_thicknesses'][1] -= 50e-9
 # opt_params['layer_thicknesses'][2] += 50e-9 
-# directivity.FoM(opt_params, plot=True) 
 # =============================================================================
+directivity.FoM(opt_params, plot=True) 

@@ -401,36 +401,34 @@ def FoM(params, queue=None, plot=False):
     return (best_results['best FoM'], best_results['QW individual depths']) 
 
     
-# =============================================================================
-# # Results of optimization in S4 
-# params_2d = {
-#           'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
-#           'wavelength_center' : 470e-9, 
-#           'wavelength_FWHM' : 20e-9, 
-#           'wavelength_points' : 1, 
-#           'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
-#           'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
-#           'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
-#           'layer_count' : 4, 
-#           'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
-#           'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
-#           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
-#           #'QW_count' : 3, 
-#           'QW_relative_intensities' : [1], # relative intensities of QWs 
-#           'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
-#           'ribbon_count' : 1, # number of nanoribbons to etch 
-#           'notch_count' : 1, 
-#           'target_k' : (0, 0) # (kx, ky) 
-#           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
-#           , 'period' : [698e-9, 691e-9], # um 
-#           'ribbon_centers' : [300e-9], 
-#           'ribbon_widths' : [220e-9],  
-#           'notch_centers' : [300e-9], 
-#           'notch_widths' : [444e-9], 
-#           'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
-#           }
-# FoM(params_2d, plot=True) 
-# =============================================================================
+# Results of 2025-11-14 optimization in S4 (note, this S4 opt was done with restricted QW depth)
+params_2d = {
+          'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
+          'wavelength_center' : 470e-9, 
+          'wavelength_FWHM' : 20e-9, 
+          'wavelength_points' : 1, 
+          'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
+          'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
+          'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
+          'layer_count' : 4, 
+          'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
+          'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
+          'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
+          #'QW_count' : 3, 
+          'QW_relative_intensities' : [1], # relative intensities of QWs 
+          'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
+          'ribbon_count' : 1, # number of nanoribbons to etch 
+          'notch_count' : 1, 
+          'target_k' : (0, 0) # (kx, ky) 
+          # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+          , 'period' : [698e-9, 691e-9], # um 
+          'ribbon_centers' : [300e-9], 
+          'ribbon_widths' : [220e-9],  
+          'notch_centers' : [300e-9], 
+          'notch_widths' : [444e-9], 
+          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
+          }
+FoM(params_2d, plot=True) 
 
 # =============================================================================
 # #These didn't work:  
@@ -525,37 +523,39 @@ def FoM(params, queue=None, plot=False):
 # #directivity.FoM_2d(params_2d)
 # =============================================================================
            
-# Larry's case 5 (dual-pol optimized metasurface) 
-params = {} 
-params['wavelength_center'] = 1080e-9 
-params['wavelength_points'] = 1 
-params['wavelength_FWHM'] = 1e-9
-params['layer_count'] = 3 
-params['layer_names'] = ['sapp', 'GaN', 'air'] # reciprocity plane waves are incident from first layer 
-params['layer_thicknesses'] = [1e-6, 0.996e-6, 1e-6] # GaN thickness can be variable param 
-params['layer_materials'] = ["Al2O3 - Palik", "GaN - custom", "etch"]
-params['layer_is_etched'] = [False, True, False] # whether or not to etch through each layer to make the ribbons 
-params['ribbon_count'] = 3 # number of nanoribbons to etch 
-params['notch_count'] = 0 
-params['target_k'] = (0, 0) # (kx, ky) 
-# The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
-params['period'] = [0.540e-6, 0.540e-6] # um 
-params['ribbon_centers'] = [0.065e-6, 0.215e-6, 0.435e-6] 
-params['ribbon_widths'] = [0.050e-6, 0.070e-6, 0.110e-6]  
-params['notch_centers'] = [] 
-params['notch_widths'] = [] 
-params['QW_relative_intensities'] = [1] 
-params['FoM_definition'] = '$D_s+D_p$'
-
-params['QW_z_limits'] = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6),
-               params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6)]
-params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
-params['QW_z_mesh'] = 5 
-params['QW_xy_mesh'] = 90 
-params['k_mesh'] = 24 
-params['Fourier_N'] = 50 
-#params_2d['notch_depths'] = []
-#QW_depth = 0.996 - (0.120 + 0.003) # measured from first layer (sapp.)
+# =============================================================================
+# # Larry's case 5 (dual-pol optimized metasurface) 
+# params = {} 
+# params['wavelength_center'] = 1080e-9 
+# params['wavelength_points'] = 1 
+# params['wavelength_FWHM'] = 1e-9
+# params['layer_count'] = 3 
+# params['layer_names'] = ['sapp', 'GaN', 'air'] # reciprocity plane waves are incident from first layer 
+# params['layer_thicknesses'] = [1e-6, 0.996e-6, 1e-6] # GaN thickness can be variable param 
+# params['layer_materials'] = ["Al2O3 - Palik", "GaN - custom", "etch"]
+# params['layer_is_etched'] = [False, True, False] # whether or not to etch through each layer to make the ribbons 
+# params['ribbon_count'] = 3 # number of nanoribbons to etch 
+# params['notch_count'] = 0 
+# params['target_k'] = (0, 0) # (kx, ky) 
+# # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+# params['period'] = [0.540e-6, 0.540e-6] # um 
+# params['ribbon_centers'] = [0.065e-6, 0.215e-6, 0.435e-6] 
+# params['ribbon_widths'] = [0.050e-6, 0.070e-6, 0.110e-6]  
+# params['notch_centers'] = [] 
+# params['notch_widths'] = [] 
+# params['QW_relative_intensities'] = [1] 
+# params['FoM_definition'] = '$D_s+D_p$'
+# 
+# params['QW_z_limits'] = [params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6),
+#                params['layer_thicknesses'][0] + params['layer_thicknesses'][1] - (0.120e-6 + 0.003e-6)]
+# params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
+# params['QW_z_mesh'] = 5 
+# params['QW_xy_mesh'] = 90 
+# params['k_mesh'] = 24 
+# params['Fourier_N'] = 50 
+# #params_2d['notch_depths'] = []
+# #QW_depth = 0.996 - (0.120 + 0.003) # measured from first layer (sapp.)
+# =============================================================================
 
 # =============================================================================
 # # Larry's case 1
@@ -593,7 +593,7 @@ params['Fourier_N'] = 50
 # params['QW_z_limits'][1] += 10e-9 # So that the best_D finder works 
 # =============================================================================
 
-FoM(params, plot=True) 
+#FoM(params, plot=True) 
         
 # =============================================================================
 # # Test device

@@ -19,6 +19,11 @@ import gc
 import time 
 import traceback 
 
+NA = 1.3
+#from dOpt import min_mesa_width 
+min_wall_width = 50e-9 
+#minimum_ribbon_thickness = 0.050e-6 
+c = 3e8 # Speed of light 
 
 def mem(): # Helper function for tracking where the memory usage spikes 
     return psutil.Process(os.getpid()).memory_info().rss / 1e9
@@ -127,7 +132,7 @@ def setup(params, sim, QW_z_limits, lam):
            sim.setnamed(obj, name, value)
           
     if params['geometry'] == 'pillars': 
-        sim.setnamed("RCWA", "background material", "SiO2 - Palik"),  # or whatever glass you're using
+        sim.setnamed("RCWA", "background material", "SiO2 (Glass) - Palik"),  # or whatever glass you're using
     
     return 
 
@@ -384,13 +389,9 @@ def FoM(params, queue=None, plot=False):
         plt.colorbar() 
         plt.show()
         
-    return (best_results['best D'], best_results['individual depths']) 
+    return (best_results['best FoM'], best_results['QW individual depths']) 
 
-NA = 1.3
-#from dOpt import min_mesa_width 
-min_wall_width = 50e-9 
-#minimum_ribbon_thickness = 0.050e-6 
-c = 3e8 # Speed of light 
+
 
 # =============================================================================
 # #These didn't work:  

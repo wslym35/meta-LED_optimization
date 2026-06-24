@@ -40,24 +40,24 @@ params_2d = {
           'layer_names' : ['sapp', 'uniform_GaN', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
           'layer_thicknesses' : [1e-6, None, None, 0.120e-6, 1e-6], # GaN thicknesses can be variable param 
           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", "GaN - custom", 'ITO - custom', 'etch'],
-          #'QW_count' : 3, 
           'QW_relative_intensities' : [0.45, 0.33, 0.22], # relative intensities of QWs 
           'layer_is_etched' : [False, False, True, True, False], # whether or not to etch through each layer to make the ribbons 
           #'QW_layer' : 2, # Which layer is the QW in: 0, 1, 2, ... The QW will be optimally placed within 50-300 nm of the bottom of this layer (assuming orientation is layer 0 on top)
           'geometry' : 'holes', # Either 'holes' or 'pillars' 
-          'hole_count' : 4, # For now, should be a perfect square (1, 4, 9, ...)
+          'hole_count' : 1, # For now, should be a perfect square (1, 4, 9, ...)
           'target_k' : (0, 0) # (kx, ky) 
           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
           , 'period' : [], # um 
           'hole_centers_x' : [],     # x position of each hole center
           'hole_centers_y' : [],     # y position of each hole center
           'hole_diameters' : [],     # every hole is allowed a different diameter 
-          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$'][0] 
+          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][0] 
           }
-                           
-raise RuntimeWarning("You need to check that the materials (glass, air) are handled correctly in each layer, for both the holes and pillars cases. Use an index monitor or something.")
-print("Continuing in 10 seconds...")
-time.sleep(10) 
+        
+if params_2d['geometry'] == 'pillars':                   
+    raise RuntimeWarning("You need to check that the materials (glass, air) are handled correctly in each layer, for the pillars geometry. Use an index monitor or something.")
+    print("Continuing in 10 seconds...")
+    time.sleep(10) 
 
 min_period = params_2d['wavelength_center'] * 0.50 
 max_period = params_2d['wavelength_center'] * 1.50 
@@ -186,30 +186,41 @@ def D_opt(dim, variables, params, constraints, trials):
 
     #'Define how to evaluate trials' 
     def evaluate(parameterization):
+        params['period'] = [] 
         params['hole_centers_x'] = []
         params['hole_centers_y'] = []
         params['hole_diameters'] = []
         #params['notch_depths'] = []
         for n in [v['name'] for v in variables]:
             if n[-9:] == 'thickness': 
-                if n[:3] == 'uni': 
-                    params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
-                elif n[:3] == 'etc': 
-                    params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
-                else:
-                    print("Uh oh, that's not a valid thickness parameter name!")
-            if n == 'GaN_thickness':
-                raise ValueError("This case (only one GaN layer) needs to be checked and probably modified. 2026/04/20")
+                if params['layer_count'] == 5:
+                    if n[:3] == 'uni': 
+                        params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'etc': 
+                        params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'ITO': 
+                        params['layer_thicknesses'][3] = round(parameterization.get(n) / scale, 9) 
+                    else:
+                        raise RuntimeWarning("Uh oh, {n} is not a valid thickness parameter name!")
+                elif params['layer_count'] == 4:
+                    if n[:3] == 'tot': 
+                        params['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9) 
+                    elif n[:3] == 'ITO': 
+                        params['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9) 
+                    else:
+                        raise RuntimeWarning("Uh oh, {n} is not a valid thickness parameter name!")
+# =============================================================================
+#             if n == 'GaN_thickness':
+#                 raise ValueError("This case (only one GaN layer) needs to be checked and probably modified. 2026/04/20")
+# =============================================================================
                 #params['layer_thicknesses'][1] = np.round(parameterization.get(n), 3)
             # If the last character is a number, use it as an index to set the params
             # Round because we can't fab with greater than 1 nm accuracy anyway; in fact, the limit is more like 10 nm 
-            if n[-1].isdigit():
+            elif n[-1].isdigit():
                 params[n[:-2]].append(round(parameterization.get(n) / scale, 9)) 
-# =============================================================================
-#             else:
-#                 print('\n\nEntering the else statement\n\n') 
-#                 params[n].append(parameterization.get(n)) 
-# =============================================================================
+            else:
+                raise RuntimeWarning("Uh oh, {n} is not a valid parameter name!")
+                
         # Check nonlinear overlap constraint 
         if holes_overlap(params):
             raise RuntimeError("Holes overlap.")    
