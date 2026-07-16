@@ -170,7 +170,23 @@ def I(params, sim, angles):
     sim.setnamed("RCWA", "incident angle table", angles) 
     print(f"Before solve: {mem():.2f} GB")
     sim.save("/tmp/rcwa_session.fsp") # Throwaway file. Saving prevents a lot of issues when running solver loops with lumapi 
-    sim.run() 
+    time.sleep(0.5) # Pause to guarantee the file handles are completely closed 
+    
+    # Run the sim with exception handling 
+    success = False
+    retries = 0
+    while not success and retries < 5:
+        try:
+            sim.run()
+            success = True
+        except Exception as e:
+            retries += 1
+            print(f"HPC Solver busy or dropped connection. \n{e} \nRetrying execution (attempt {retries}/5)...")
+            time.sleep(5) # Wait for the FlexNet server to clear
+    
+    if not success:
+        raise RuntimeError("Failed to check out solver license after 5 attempts.")
+    
     print(f"After solve: {mem():.2f} GB")
     
 # This is where the memory explosion happens -- Claude suggests calculating I_z_lambda_angle in Lumerical and then just returning I_z_lambda_angle to Python 
@@ -257,6 +273,10 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
             sim.eval('')
         except: 
             sim = lumapi.FDTD(hide=False) 
+            
+        # Force the simulation to run in the local user thread without calling the HPC solver
+        sim.setresource("FDTD", "RCWA", "use-local-licensing", True) 
+        
         setup(params, sim, QW_z_limits, lam) 
     
         I_z_lambda_angle_pol[:,li,:,:] = I(params, sim, np.array(angles))
@@ -271,7 +291,7 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
             
     return I_kx_ky_z_lambda_pol
 
-def FoM(params, queue=None, plot=False):
+def FoM(params, queue=None, plot=False, QW_fixed=None):
     
     # Make the array of evenly-spaced wavelengths and the associated weights 
     if params['wavelength_points'] == 1:
@@ -362,7 +382,43 @@ def FoM(params, queue=None, plot=False):
                             }
         return best_result
     
-    best_results = find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing) 
+    def find_fixed_QW_FoM(D_z_pol, QW_fixed):
+        
+        # QW_fixed is given as a numpy array of QW depths, measured from the sapphire 
+        
+        fom = 0 #D_z[i] + D_z[i+N] + D_z[i+2*N] 
+        indices = [np.argmin(np.abs(z_range - params['layer_thicknesses'][0] - QW_fixed[i] )) for i in range(len(QW_fixed))] 
+        #indiv_fom = []
+        
+        #for j in range(len(params['QW_relative_intensities'])): 
+            #idx = i + j * N
+        for j in range(len(indices)): 
+            if params['FoM_definition'] == '$D_s+D_p$':
+                fom += np.sum(D_z_pol, axis=-1)[indices[j]] * params['QW_relative_intensities'][j] 
+                #indices.append(idx) 
+                #indiv_fom.append(np.sum(D_z_pol, axis=-1)[idx] * params['QW_relative_intensities'][j]) 
+            elif params['FoM_definition'] == '$D_s D_p / (D_s + D_p)$': 
+                D_s = D_z_pol[:,0]
+                D_p = D_z_pol[:,1] 
+                fom += ((D_s*D_p)/(D_s+D_p))[indices[j]] * params['QW_relative_intensities'][j] 
+                #indices.append(idx) 
+                #indiv_fom.append(((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] )
+            else: 
+                raise RuntimeError("Please choose an acceptable FoM definition")
+        
+        best_result = {
+            "best FoM" : float(fom), 
+            "QW indices" : tuple(indices), 
+            #"QW individual FoMs" : tuple(indiv_fom), 
+            "QW individual depths" : tuple(round(1e6*float(z_range[i]-params['layer_thicknesses'][0]),3) for i in indices), 
+            #"QW spacing" : z_range[N] - z_range[0] 
+                }
+        return best_result
+    
+    if QW_fixed is None: 
+        best_results = find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing) 
+    else: 
+        best_results = find_fixed_QW_FoM(D_z_pol, QW_fixed) 
     print(f"Highest directivity is {params['FoM_definition']}={best_results['best FoM']:.3f}, with QWs at depths {' um, '.join(f'{n:.3f}' for n in best_results['QW individual depths'])} um (from sapphire)")
      
     # For multithreading module 
@@ -401,34 +457,36 @@ def FoM(params, queue=None, plot=False):
     return (best_results['best FoM'], best_results['QW individual depths']) 
 
     
-# Results of 2025-11-14 optimization in S4 (note, this S4 opt was done with restricted QW depth)
-params_2d = {
-          'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
-          'wavelength_center' : 470e-9, 
-          'wavelength_FWHM' : 20e-9, 
-          'wavelength_points' : 1, 
-          'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
-          'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
-          'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
-          'layer_count' : 4, 
-          'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
-          'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
-          'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
-          #'QW_count' : 3, 
-          'QW_relative_intensities' : [1], # relative intensities of QWs 
-          'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
-          'ribbon_count' : 1, # number of nanoribbons to etch 
-          'notch_count' : 1, 
-          'target_k' : (0, 0) # (kx, ky) 
-          # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
-          , 'period' : [698e-9, 691e-9], # um 
-          'ribbon_centers' : [300e-9], 
-          'ribbon_widths' : [220e-9],  
-          'notch_centers' : [300e-9], 
-          'notch_widths' : [444e-9], 
-          'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
-          }
-FoM(params_2d, plot=True) 
+# =============================================================================
+# # Results of 2025-11-14 optimization in S4 (note, this S4 opt was done with restricted QW depth)
+# params_2d = {
+#           'Fourier_N' : 50, # N = 50 recommended by Claude after convergence_test, 2026-04-14. Note, this doesn't seem to affect memory bottleneck like the other mesh sizes do. 
+#           'wavelength_center' : 470e-9, 
+#           'wavelength_FWHM' : 20e-9, 
+#           'wavelength_points' : 1, 
+#           'QW_xy_mesh' : 90, # It would seem 90 is the bare minimum, based on a period of 1.5 * 540 nm, a min_mesa_width of 50 nm, and a non-emitting thickness of 20 nm
+#           'QW_z_mesh': 55, # N=55 gives at most 20 nm (~wavelength/10 in GaN) between sampled points 
+#           'k_mesh': 24, # Memory contraint is such that k=28 is about as high as you can go, but k=24 gives roughly the same D result 
+#           'layer_count' : 4, 
+#           'layer_names' : ['sapp', 'etched_GaN', 'ITO', 'air'], # reciprocity plane waves are incident from first layer 
+#           'layer_thicknesses' : [1e-6, 1.74e-6, 0.140e-6, 1e-6], # GaN thicknesses can be variable param 
+#           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", 'ITO - custom', 'etch'],
+#           #'QW_count' : 3, 
+#           'QW_relative_intensities' : [1], # relative intensities of QWs 
+#           'layer_is_etched' : [False, True, True, False], # whether or not to etch through each layer to make the ribbons 
+#           'ribbon_count' : 1, # number of nanoribbons to etch 
+#           'notch_count' : 1, 
+#           'target_k' : (0, 0) # (kx, ky) 
+#           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
+#           , 'period' : [698e-9, 691e-9], # um 
+#           'ribbon_centers' : [300e-9], 
+#           'ribbon_widths' : [220e-9],  
+#           'notch_centers' : [300e-9], 
+#           'notch_widths' : [444e-9], 
+#           'FoM_definition' : ['$D_s+D_p$', '$D_s D_p / (D_s + D_p)$', '$D_s + D_p - |D_s - D_p|$'][2] 
+#           }
+# FoM(params_2d, plot=True) 
+# =============================================================================
 
 # =============================================================================
 # #These didn't work:  

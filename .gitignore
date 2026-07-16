@@ -2,3 +2,4 @@ results/
 LumRCWA/fields.mat 
 __pycache__/
 with-ribbon-placement-error/
+*.pyc 

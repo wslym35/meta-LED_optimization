@@ -8,17 +8,15 @@ Created on Thu Sep 12 10:11:59 2024
 import matplotlib.pyplot as plt 
 import numpy as np 
 import os 
-import sys 
 import directivity 
+from pathlib import Path 
 
-results_folder = '/home/quadrupole/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/results'
-date = '2026-06-22' 
-data_filename = 'data.npy'
-data = np.load(os.path.join(results_folder, date, data_filename), allow_pickle = True) 
-#sys.path.append(os.path.join(results_folder, date)) 
-params_filename = 'opt_params.npy'
-opt_params = np.load(os.path.join(results_folder, date, params_filename), allow_pickle = True).item() 
-#FoM = '$D_s+D_p$'#'$D_s + D_p$ '#'- |D_s - D_p|$'#'$D_{s+p}$' #'$(D_s D_p) / (D_s + D_p)$'
+current_path = Path(os.getcwd()).resolve()
+results_dir = os.path.join(current_path.parent.parent, 'results') #'/home/*/Dropbox/research/computation/Lumerical/RCWA/meta-LED_optimization/results'
+date = '2026-04-27' 
+data = np.load(os.path.join(results_dir, date, 'data.npy'), allow_pickle = True) 
+opt_params = np.load(os.path.join(results_dir, date, 'opt_params.npy'), allow_pickle = True).item() 
+
 
 def plot_optimization(data, save = False):
     
@@ -35,7 +33,7 @@ def plot_optimization(data, save = False):
     plt.ylabel('FoM') 
     plt.title('Results of ' + date + ' optimization \nFoM = ' + opt_params['FoM_definition']) 
     if save: 
-        plt.savefig(os.path.join(results_folder, date, 'convergence.png'), dpi=300, bbox_inches='tight')  
+        plt.savefig(os.path.join(results_dir, date, 'convergence.png'), dpi=300, bbox_inches='tight')  
     plt.show() 
 
 
@@ -43,13 +41,19 @@ plot_optimization(data, save=False)
 #plt.plot([i for i in range(len(data))], data[:,0],'o')
 #plt.show() 
 
+# Tolerence testing 
 # =============================================================================
-# opt_params['wavelength_center'] = 480e-9
-# opt_params['wavelength_points'] = 1
+# opt_params['wavelength_points'] = 5
 # opt_params['wavelength_FWHM'] = 100e-9
 # =============================================================================
 # =============================================================================
-# opt_params['layer_thicknesses'][1] -= 50e-9
-# opt_params['layer_thicknesses'][2] += 50e-9 
+# overetch = -50e-9
+# opt_params['layer_thicknesses'][1] -= overetch
+# opt_params['layer_thicknesses'][2] += overetch 
 # =============================================================================
-directivity.FoM(opt_params, plot=True) 
+
+QW_fixed = None #np.array([2.200, 2.209, 2.219]) * 1e-6
+
+opt_params['ribbon_widths'][0] *= 2
+
+directivity.FoM(opt_params, plot=True, QW_fixed=QW_fixed) 

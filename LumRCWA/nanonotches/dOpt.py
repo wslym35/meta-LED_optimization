@@ -42,9 +42,9 @@ params_2d = {
           'layer_materials' : ["Al2O3 - Palik", "GaN - custom", "GaN - custom", 'ITO - custom', 'etch'],
           'QW_relative_intensities' : [0.45, 0.33, 0.22], # relative intensities of QWs 
           'layer_is_etched' : [False, False, True, True, False], # whether or not to etch through each layer to make the ribbons 
-          'ribbon_count' : 1, # number of nanoribbons to etch 
-          'notch_count' : 1, 
-          'target_k' : (0, 0) # (kx, ky) 
+          'ribbon_count' : 3, # number of nanoribbons to etch 
+          'notch_count' : 3, 
+          'target_k' : (0.33, 0.33) # (kx, ky) 
           # The params below will be incorporated into 'var' as fixed or range parameters, then passed to FoM in evaluate() 
           , 'period' : [], # um 
           'ribbon_centers' : [], 
@@ -244,7 +244,35 @@ def D_opt(dim, variables, params, constraints, trials):
         return {"Directivity": (FoM(params), 0.0)}  # Standard error is 0 (we assume S4 gives an exact solution) 
 
 
-    results_ls = [['Directivity', 'QW depth', 'Input params']] 
+    def parameterization_to_sim_params(parameterization):
+        """Convert a raw Ax parameterization dict to the physical/grouped param dict
+        that was actually passed to FoM() — mirrors the logic in evaluate()."""
+        import copy
+        sim = copy.deepcopy(params)  # start from a deep copy of fixed params
+        sim['period'] = []
+        sim['ribbon_centers'] = []
+        sim['ribbon_widths'] = []
+        sim['notch_centers'] = []
+        sim['notch_widths'] = []
+        for n in [v['name'] for v in variables]:
+            if n[-9:] == 'thickness':
+                if params['layer_count'] == 5:
+                    if n[:3] == 'uni':
+                        sim['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9)
+                    elif n[:3] == 'etc':
+                        sim['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9)
+                    elif n[:3] == 'ITO':
+                        sim['layer_thicknesses'][3] = round(parameterization.get(n) / scale, 9)
+                elif params['layer_count'] == 4:
+                    if n[:3] == 'tot':
+                        sim['layer_thicknesses'][1] = round(parameterization.get(n) / scale, 9)
+                    elif n[:3] == 'ITO':
+                        sim['layer_thicknesses'][2] = round(parameterization.get(n) / scale, 9)
+            elif n[-1].isdigit():
+                sim[n[:-2]].append(round(parameterization.get(n) / scale, 9))
+        return sim
+
+    results_ls = [['Directivity', 'QW depth', 'Simulated params']]
 
     #'Run optimization loop'
     trial_count = training_count + learning_count 
@@ -256,16 +284,12 @@ def D_opt(dim, variables, params, constraints, trials):
             ax_client.abandon_trial(trial_index) 
             print(f"Trial abandoned. Error: {e} (division by zero might mean QWxy was empty)")
             continue 
-        #D, QW_depth = results["Directivity"][0] 
-        #error = results["Directivity"][1] 
-        # Add results to my own data list 
-        results_ls.append([D, QW_depths, parameterization]) 
-        # Local evaluation here can be replaced with deployment to external system.
-        # Ax auto-selects an appropriate optimization algorithm based on the search space. For more advance use cases that require a specific optimization algorithm, pass a generation_strategy argument into the AxClient constructor.
+        # Store the physical/grouped sim params for this trial (varies row-to-row)
+        sim_params = parameterization_to_sim_params(parameterization)
+        results_ls.append([D, QW_depths, sim_params]) 
         ax_client.complete_trial(trial_index=trial_index, raw_data=D)  
         print('\n')
     
-
 
     #Get the output as a dataframe? 
     trials_df = pd.DataFrame(data=results_ls[1:], columns=results_ls[0]) 
@@ -273,19 +297,20 @@ def D_opt(dim, variables, params, constraints, trials):
     trials_df.insert(loc=len(trials_df.columns), column="Generation Model", value=ax_df["generation_node"])
     print(trials_df) 
     
-    best_input, best_output = ax_client.get_best_parameters() 
-    params.update(best_input) 
-    print(params) 
+    best_ax_params, best_output = ax_client.get_best_parameters() 
+    print(best_ax_params) 
     means, covariances = best_output 
     print(means) 
+
+    # Convert best Ax params (period_0, period_1, ...) to grouped physical params
+    # so that opt_params keys match what FoM() actually received (period, ribbon_centers, ...)
+    best_sim_params = parameterization_to_sim_params(best_ax_params)
     
     # Easier to use np.array than pd.dataframe 
     data = trials_df.to_numpy() 
-    p_array = np.reshape(np.repeat(params, trial_count), (trial_count,1))
-    data = np.append(data, p_array, 1) 
-    data = np.vstack([['\'D\'','\'QW depths\'', '\'variables\'', '\'method\'', '\'fixed parameters\''], data])
+    data = np.vstack([['\'D\'', '\'QW depths\'', '\'simulated params\'', '\'method\''], data])
     
-    return data, ax_client 
+    return data, best_sim_params 
 
 #D, QW_depth = FoM(dim, params_2d) 
 
@@ -293,6 +318,30 @@ def D_opt(dim, variables, params, constraints, trials):
 training_count = 10 * len(var_2d) 
 learning_count = 3 * training_count 
 #params_2d['reciprocity_N'] = 26 # When NA=1.0 instead of 1.3, decrease reciprocity_N from 26 to 20 to keep the same grittiness 
-data, client = D_opt(dim, var_2d, params_2d, constraints, (training_count, learning_count)) 
+data, best_sim_params = D_opt(dim, var_2d, params_2d, constraints, (training_count, learning_count)) 
 
-# After optimization, I should check sensitivity to ITO thickness and wavelength 
+# Save results 
+import os
+from pathlib import Path
+from datetime import date
+
+current_path = Path(os.getcwd()).resolve()
+results_dir = os.path.join(current_path.parent.parent, 'results')
+
+def make_unique_dir(base_path):
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+        return base_path
+    counter = 1
+    while True:
+        new_path = f"{base_path}({counter})"
+        if not os.path.exists(new_path):
+            os.makedirs(new_path)
+            return new_path
+        counter += 1
+
+date_dir = make_unique_dir(os.path.join(results_dir, str(date.today())))
+np.save(os.path.join(date_dir, 'opt_params.npy'), best_sim_params)
+np.save(os.path.join(date_dir, 'data.npy'), data)
+
+# After optimization, I should check sensitivity to ITO thickness and wavelength

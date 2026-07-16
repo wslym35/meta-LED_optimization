@@ -127,12 +127,23 @@ def setup(params, sim, QW_z_limits, lam):
             else: 
                 raise RuntimeError("'geometry' should be set to either 'holes' or 'pillars'.")
     
+    if params['geometry'] == 'pillars': 
+        # Add SiO2 background with mesh order 3
+        sim.addrect()
+        sim.set("name", "background") 
+        configuration.append(
+            ("background", ( 
+                ("x min", 0), ("x max", params['period'][0]),
+                ("y min", 0), ("y max", params['period'][1]),
+                ("z min", 0), ("z max", sum(params['layer_thicknesses'][:])),
+                ("material", "SiO2 (Glass) - Palik"), 
+                ("override mesh order from material database", True), ("mesh order", 3) 
+                ))
+            )
+        
     for obj, parameters in configuration:
        for name, value in parameters:
            sim.setnamed(obj, name, value)
-          
-    if params['geometry'] == 'pillars': 
-        sim.setnamed("RCWA", "background material", "SiO2 (Glass) - Palik"),  # or whatever glass you're using
     
     return 
 
@@ -223,47 +234,48 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
 #     n_sapp = np.real(sim.getresult("RCWA", "index")['index_z'][0,0,0,0])  
 # =============================================================================
     # But this is even faster    
-    sim = lumapi.FDTD(hide=False) 
-    n_sapp = np.real(sim.getindex(params['layer_materials'][0], c/wavelengths[0])[0][0])
-    
-
-    # Convert kx_range and ky_range to a table of angles to feed the RCWA solver 
-    # No need to loop over polarization; s- and p-pol are automatically calculated simultaneously 
-    angles = [] 
-    index_map = []  # (kxi, kyi) for each angle, used for unfolding data later 
-    for kxi in range(len(kx_range)):
-        for kyi in range(len(ky_range)):
-            kx = kx_range[kxi]
-            ky = ky_range[kyi]
-            
-            if (np.sqrt(kx**2 + ky**2)) <= NA: # inside the measureable circle 
-                k0 = np.sqrt(kx**2 + ky**2)
-                polar = np.rad2deg(np.arcsin(k0 / n_sapp)) 
-                if k0 == 0: 
-                    azimuthal = 0
-                else: 
-                    if ky != 0:
-                        azimuthal = np.rad2deg(np.sign(ky) * np.arccos(kx/k0)) 
-                    else: 
-                        azimuthal = np.rad2deg(1 *  np.arccos(kx/k0))
-                angles.append([polar,azimuthal])
-                index_map.append((kxi, kyi)) 
-    
-    # Initialize 
-    I_z_lambda_angle_pol = np.zeros((params['QW_z_mesh'], len(wavelengths), len(angles), 2)) 
-    
-    for li in range(len(wavelengths)):
-        lam = wavelengths[li]
+    with lumapi.FDTD(hide=False) as sim: 
+        n_sapp = np.real(sim.getindex(params['layer_materials'][0], c/wavelengths[0])[0][0])
         
-        try: 
-            sim.eval('')
-        except: 
-            sim = lumapi.FDTD(hide=False) 
-        setup(params, sim, QW_z_limits, lam) 
     
-        I_z_lambda_angle_pol[:,li,:,:] = I(params, sim, np.array(angles))
-        sim.close() # Superfluous, but safe 
-        gc.collect() 
+        # Convert kx_range and ky_range to a table of angles to feed the RCWA solver 
+        # No need to loop over polarization; s- and p-pol are automatically calculated simultaneously 
+        angles = [] 
+        index_map = []  # (kxi, kyi) for each angle, used for unfolding data later 
+        for kxi in range(len(kx_range)):
+            for kyi in range(len(ky_range)):
+                kx = kx_range[kxi]
+                ky = ky_range[kyi]
+                
+                if (np.sqrt(kx**2 + ky**2)) <= NA: # inside the measureable circle 
+                    k0 = np.sqrt(kx**2 + ky**2)
+                    polar = np.rad2deg(np.arcsin(k0 / n_sapp)) 
+                    if k0 == 0: 
+                        azimuthal = 0
+                    else: 
+                        if ky != 0:
+                            azimuthal = np.rad2deg(np.sign(ky) * np.arccos(kx/k0)) 
+                        else: 
+                            azimuthal = np.rad2deg(1 *  np.arccos(kx/k0))
+                    angles.append([polar,azimuthal])
+                    index_map.append((kxi, kyi)) 
+        
+        # Initialize 
+        I_z_lambda_angle_pol = np.zeros((params['QW_z_mesh'], len(wavelengths), len(angles), 2)) 
+        
+        for li in range(len(wavelengths)):
+            lam = wavelengths[li]
+            
+            try: 
+                sim.eval('')
+            except: 
+                sim = lumapi.FDTD(hide=False) 
+            setup(params, sim, QW_z_limits, lam) 
+        
+            I_z_lambda_angle_pol[:,li,:,:] = I(params, sim, np.array(angles))
+            sim.close() # Superfluous, but safe 
+            del sim 
+            gc.collect() 
     
     # Now I just need to unpack I_z_lambda_angle_pol into a kx-by-ky matrix 
     I_kx_ky_z_lambda_pol = np.zeros((len(kx_range),len(ky_range)) + np.shape(I_z_lambda_angle_pol)[:-2] + (2,))
@@ -273,7 +285,7 @@ def RCWA_sim(params, kx_range, ky_range, QW_z_limits, wavelengths):
             
     return I_kx_ky_z_lambda_pol
 
-def FoM(params, queue=None, plot=False):
+def FoM(params, queue=None, plot=False, QW_fixed=None):
     
     # Make the array of evenly-spaced wavelengths and the associated weights 
     if params['wavelength_points'] == 1:
@@ -354,11 +366,47 @@ def FoM(params, queue=None, plot=False):
                             }
         return best_result
     
-    best_results = find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing) 
+    def find_fixed_QW_FoM(D_z_pol, QW_fixed):
+        
+        # QW_fixed is given as a numpy array of QW depths, measured from the sapphire 
+        
+        fom = 0 #D_z[i] + D_z[i+N] + D_z[i+2*N] 
+        indices = [np.argmin(np.abs(z_range - params['layer_thicknesses'][0] - QW_fixed[i] )) for i in range(len(QW_fixed))] 
+        #indiv_fom = []
+        
+        #for j in range(len(params['QW_relative_intensities'])): 
+            #idx = i + j * N
+        for j in range(len(indices)): 
+            if params['FoM_definition'] == '$D_s+D_p$':
+                fom += np.sum(D_z_pol, axis=-1)[indices[j]] * params['QW_relative_intensities'][j] 
+                #indices.append(idx) 
+                #indiv_fom.append(np.sum(D_z_pol, axis=-1)[idx] * params['QW_relative_intensities'][j]) 
+            elif params['FoM_definition'] == '$D_s D_p / (D_s + D_p)$': 
+                D_s = D_z_pol[:,0]
+                D_p = D_z_pol[:,1] 
+                fom += ((D_s*D_p)/(D_s+D_p))[indices[j]] * params['QW_relative_intensities'][j] 
+                #indices.append(idx) 
+                #indiv_fom.append(((D_s*D_p)/(D_s+D_p))[idx] * params['QW_relative_intensities'][j] )
+            else: 
+                raise RuntimeError("Please choose an acceptable FoM definition")
+        
+        best_result = {
+            "best FoM" : float(fom), 
+            "QW indices" : tuple(indices), 
+            #"QW individual FoMs" : tuple(indiv_fom), 
+            "QW individual depths" : tuple(round(1e6*float(z_range[i]-params['layer_thicknesses'][0]),3) for i in indices), 
+            #"QW spacing" : z_range[N] - z_range[0] 
+                }
+        return best_result
+    
+    if QW_fixed is None: 
+        best_results = find_max_FoM(D_z_pol, min_zi_spacing, max_zi_spacing) 
+    else: 
+        best_results = find_fixed_QW_FoM(D_z_pol, QW_fixed) 
     print(f"Highest directivity is {params['FoM_definition']}={best_results['best FoM']:.3f}, with QWs at depths {' um, '.join(f'{n:.3f}' for n in best_results['QW individual depths'])} um (from sapphire)")
     
     # For multithreading module 
-    if queue != None: queue.put((best_results['best D'], best_results['individual depths']))
+    if queue != None: queue.put((best_results['best FoM'], best_results['QW individual depths']))
     
     if plot: 
         I_kx_ky_pol = np.sum([params['QW_relative_intensities'][i]*I_kx_ky_z_pol[:,:,best_results['QW indices'][i],:] for i in range(len(params['QW_relative_intensities']))], axis=0)
