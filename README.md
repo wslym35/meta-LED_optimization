@@ -86,7 +86,7 @@ long-lived Lumerical session (`lumapi`) across trials instead.
 | `LumRCWA/nanonotches/` | The same ribbon+notch geometry, on Lumerical's RCWA solver instead of S4 (`directivity.py`, `dOpt.py`, `plotting_optimization_results.py`). |
 | `LumRCWA/nanoholes_or_planarized-pillars/` | An alternate geometry — a periodic array of etched holes or standing pillars instead of ribbons — switched via a `params['geometry']` flag (`'holes'` or `'pillars'`), same Lumerical-solver / Ax-driven pipeline otherwise. |
 | `LumRCWA/convergence-testing/` | A numerical-convergence study sweeping Fourier order, xy mesh, z mesh, and k-space mesh resolution against runtime and computed directivity, to choose settings that are accurate but not needlessly slow. |
-| `results/` | Dated output folders from optimization runs (trial history, convergence plots, emission-pattern heatmaps) — including validation against an actual fabricated device. Local run output, not tracked in git. |
+| `docs/images/` | Example images of LED emission before & after optimimzation. |
 | `with-ribbon-placement-error/` | Earlier/broader project history: first working reciprocity pipeline, fabrication-tolerance sensitivity studies, and off-normal beam-steering exploration. Also local run output, not tracked in git. |
 
 ## Setup
