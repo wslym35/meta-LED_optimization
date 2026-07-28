@@ -1,0 +1,11 @@
+# Core numerical / plotting stack
+numpy
+pandas
+matplotlib
+
+# Bayesian optimization driver (pulls in BoTorch/GPyTorch/PyTorch)
+ax-platform
+
+# NOTE: S4 (the RCWA Maxwell solver used in S4/*.py) is NOT a PyPI package.
+# It must be built/installed separately from the Stanford Stratified
+# Structure Solver source (or a maintained fork) before running this code.
