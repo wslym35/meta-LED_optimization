@@ -1,6 +1,6 @@
 # Meta-LED Optimization
 
-**Designing a nanostructured LED surface that emits light in a chosen direction and polarization — not in all directions at once.**
+**Designing a nanostructured LED (meta-LED) that emits light in a chosen direction — not in all directions at once.**
 
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 ![RCWA](https://img.shields.io/badge/Maxwell%20solver-S4%20%2F%20Lumerical-informational)
@@ -9,7 +9,7 @@
 | Before: unpatterned thin-film LED (D = 0.74) | After: optimized meta-LED (D<sub>s</sub> + D<sub>p</sub> = 31.6) |
 | :---: | :---: |
 | <img src="docs/images/thin-film-before.png" width="380" alt="Unpatterned thin-film emission pattern: a broad, diffuse ring covering nearly all angles"> | <img src="docs/images/meta-led-after.png" width="380" alt="Optimized meta-LED emission pattern: nearly all light concentrated in a small spot near normal incidence"> |
-| Emission spread thinly over (almost) every angle | Emission concentrated tightly at the target direction |
+| Emission spread over (almost) every angle | Emission concentrated tightly at the target direction |
 
 Both plots show emitted intensity vs. in-plane wavevector `(kx/k0, ky/k0)` — the same
 momentum-space view used throughout this repo's [directivity](#how-it-works) calculations.
@@ -20,16 +20,17 @@ momentum-space view used throughout this repo's [directivity](#how-it-works) cal
 
 A standard LED radiates spontaneous emission into (almost) every angle, which wastes light
 that never reaches a detector, fiber, or viewer at the angle you actually care about. This
-project designs a **meta-LED**: a GaN-based LED whose top surface is etched with a
+project designs a **meta-LED**: a GaN-based LED etched with a
 subwavelength nanostructure — parallel **nanoribbons** (optionally with rectangular **notches**
 cut into their sides), or alternatively an array of **nanoholes**/**pillars** — so that emission
-is redirected into a target angle (e.g. straight up, or steered off-normal) and/or a target
-linear polarization.
+is redirected into a target angle (e.g. straight up, or steered off-normal). Given the structure 
+of the code, you should also be able to target any linear polarization, though I haven't tested 
+that yet.
 
-The geometry — positions, widths, depths, all in the tens-to-hundreds-of-nm range — is treated
+The geometry — positions, widths, depths (all in the tens-to-hundreds-of-nm range) — is treated
 as a continuous design space and searched over automatically. Every candidate design is
 fabrication-aware: geometric constraints enforce realistic minimum trench/mesa/wall widths
-(~50-100 nm) so the optimizer can't propose something impossible to etch.
+(~50-100 nm) so the optimizer can't propose something impossible to fabricate.
 
 This repository contains **two independent implementations of the same design method**, built
 around different Maxwell solvers (see [Repository structure](#repository-structure)):
@@ -60,8 +61,10 @@ D = Ds + Dp - |Ds - Dp|
 
 which rewards designs that are directional in *both* polarizations simultaneously, rather than
 rewarding a design that's extremely directional in one polarization while staying diffuse in
-the other. (`LumRCWA/` additionally supports two other FoM definitions — `Ds + Dp` and
-`Ds*Dp/(Ds + Dp)` — selectable via `params['FoM_definition']`.)
+the other. 
+
+`LumRCWA/` additionally supports two other FoM definitions — `Ds + Dp` and
+`Ds*Dp/(Ds + Dp)` — selectable via `params['FoM_definition']`.
 
 **3. Bayesian optimization over the geometry.** [Ax](https://ax.dev/) drives the search with a
 two-phase strategy in both implementations: an initial Sobol (quasi-random, space-filling) sweep
