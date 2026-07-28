@@ -3,9 +3,17 @@ numpy
 pandas
 matplotlib
 
+# Used by LumRCWA/*/directivity.py to track memory usage
+psutil
+
 # Bayesian optimization driver (pulls in BoTorch/GPyTorch/PyTorch)
+# NOTE: S4/dOpt.py and LumRCWA/*/dOpt.py were written against different
+# Ax API generations (ax.modelbridge.* vs. ax.generation_strategy/ax.adapter.*)
+# - pin the version to match whichever backend you're running.
 ax-platform
 
-# NOTE: S4 (the RCWA Maxwell solver used in S4/*.py) is NOT a PyPI package.
-# It must be built/installed separately from the Stanford Stratified
-# Structure Solver source (or a maintained fork) before running this code.
+# NOTE: neither RCWA solver is a PyPI package - both must be installed separately:
+# - S4 (used in S4/*.py) is a compiled Maxwell solver (the Stanford Stratified
+#   Structure Solver); build it (or a maintained fork) from source.
+# - Lumerical (used in LumRCWA/*.py, via `lumapi`) requires a licensed local
+#   Lumerical install; its Python API ships with that install, not via pip.
