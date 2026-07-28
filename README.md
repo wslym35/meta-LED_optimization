@@ -8,7 +8,7 @@
 
 | Before: unpatterned thin-film LED (D = 0.74) | After: optimized meta-LED (D<sub>s</sub> + D<sub>p</sub> = 31.6) |
 | :---: | :---: |
-| ![Unpatterned thin-film emission pattern: a broad, diffuse ring covering nearly all angles](docs/images/thin-film-before.png) | ![Optimized meta-LED emission pattern: nearly all light concentrated in a small spot near normal incidence](docs/images/meta-led-after.png) |
+| <img src="docs/images/thin-film-before.png" width="380" alt="Unpatterned thin-film emission pattern: a broad, diffuse ring covering nearly all angles"> | <img src="docs/images/meta-led-after.png" width="380" alt="Optimized meta-LED emission pattern: nearly all light concentrated in a small spot near normal incidence"> |
 | Emission spread thinly over (almost) every angle | Emission concentrated tightly at the target direction |
 
 Both plots show emitted intensity vs. in-plane wavevector `(kx/k0, ky/k0)` — the same
