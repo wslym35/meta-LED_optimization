@@ -6,6 +6,14 @@
 ![RCWA](https://img.shields.io/badge/Maxwell%20solver-S4%20%2F%20Lumerical-informational)
 ![Optimization](https://img.shields.io/badge/optimization-Ax%20%2F%20BoTorch-orange)
 
+| Before: unpatterned thin-film LED (D = 0.74) | After: optimized meta-LED (D<sub>s</sub> + D<sub>p</sub> = 31.6) |
+| :---: | :---: |
+| ![Unpatterned thin-film emission pattern: a broad, diffuse ring covering nearly all angles](docs/images/thin-film-before.png) | ![Optimized meta-LED emission pattern: nearly all light concentrated in a small spot near normal incidence](docs/images/meta-led-after.png) |
+| Emission spread thinly over (almost) every angle | Emission concentrated tightly at the target direction |
+
+Both plots show emitted intensity vs. in-plane wavevector `(kx/k0, ky/k0)` — the same
+momentum-space view used throughout this repo's [directivity](#how-it-works) calculations.
+
 ---
 
 ## Overview
